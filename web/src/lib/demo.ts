@@ -28,4 +28,20 @@ export const DEMO_MACHINES: DemoMachine[] = [
   { id: 'rtx4090', label: 'Workstation', detail: 'RTX 4090 24 GB · 64 GB', gpuId: 'rtx-4090', hw: profile(24, 64, 'rtx-4090') },
 ];
 
-export const DEMO_ANSWER = `Para preparar una buena paella valenciana necesitas arroz bomba, pollo, conejo, judía verde, garrofó, tomate, aceite de oliva, azafrán y romero. Sofríe la carne a fuego medio hasta que se dore, añade las verduras y el tomate, y después el agua con el azafrán. Cuando hierva, reparte el arroz en forma de cruz, ajusta la sal y deja que se cocine sin removerlo durante unos dieciocho minutos. El secreto está en el socarrat: los últimos minutos a fuego fuerte.`;
+/** Pregunta y respuesta de la carrera de velocidad de la landing. */
+export const DEMO_QUESTION = 'Cuéntame la historia de la paella y cómo se prepara correctamente.';
+
+export const DEMO_ANSWER = `La paella nace en los campos de arroz que rodean la Albufera de Valencia. El arroz se cultivaba allí desde la época andalusí, y los jornaleros lo cocinaban al aire libre, sobre fuego de leña, con lo que tenían a mano: pollo, conejo, verduras de la huerta y, a veces, caracoles. El nombre viene del recipiente: en valenciano, "paella" es la sartén ancha y plana, del latín "patella". A mediados del siglo XIX ya aparece en recetarios, y con el tiempo se convirtió en un símbolo de la cocina española.
+
+Para prepararla correctamente, sigue estos pasos:
+
+1. Calienta aceite de oliva en la paella y dora el pollo y el conejo troceados, con sal, a fuego medio.
+2. Añade la judía verde (ferraura) y el garrofó, y rehógalos unos minutos.
+3. Incorpora el tomate rallado y una pizca de pimentón, sin dejar que se queme.
+4. Vierte el agua y deja que hierva unos veinte minutos para que el caldo coja sabor. Añade el azafrán y ajusta la sal.
+5. Reparte el arroz (bomba o senia) por toda la paella y, a partir de aquí, no lo remuevas.
+6. Cuece unos diez minutos a fuego fuerte y otros ocho a fuego suave, hasta que el arroz absorba el caldo.
+7. Al final, sube el fuego un minuto para conseguir el socarrat, la capa tostada del fondo.
+8. Deja reposar cinco minutos, tapada con un paño, y sírvela directamente de la paella.
+
+Un último consejo: la auténtica paella valenciana no lleva chorizo ni cebolla.`;
