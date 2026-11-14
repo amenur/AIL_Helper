@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { estimate, kvCacheGB, recommend, weightsGB, QUANTS } from './estimate.ts';
-import { matchGpu, profileFromAgent, type AgentHardwareReport } from './hardware.ts';
+import { isSoftwareRenderer, matchGpu, profileFromAgent, type AgentHardwareReport } from './hardware.ts';
 import type { Gpu, HardwareProfile, Model } from './types.ts';
 
 const models: Model[] = JSON.parse(readFileSync(new URL('../../../shared/catalog/models.json', import.meta.url), 'utf8'));
@@ -112,4 +112,10 @@ test('profileFromAgent: ignora la iGPU y usa la VRAM real de la dedicada', () =>
   assert.equal(p.ramGB, 31);
   assert.equal(p.ramType, 'ddr5');
   assert.equal(p.agent?.cudaVersion, '12.8');
+});
+
+test('isSoftwareRenderer detecta renderizado sin GPU', () => {
+  assert.ok(isSoftwareRenderer('ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)'));
+  assert.ok(isSoftwareRenderer('llvmpipe (LLVM 17.0.6, 256 bits)'));
+  assert.ok(!isSoftwareRenderer('ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 (0x00002786) Direct3D11)'));
 });

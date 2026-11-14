@@ -33,6 +33,11 @@ export function matchGpu(renderer: string, gpus: Gpu[]): Gpu | null {
   return best;
 }
 
+/** Renderizado por software: el navegador no expone la GPU real. */
+export function isSoftwareRenderer(renderer: string): boolean {
+  return /swiftshader|llvmpipe|softpipe|basic render|microsoft basic/i.test(renderer);
+}
+
 export interface BrowserDetection {
   cpuThreads: number | null;
   /** navigator.deviceMemory: redondeado y con tope de 8 GB. */

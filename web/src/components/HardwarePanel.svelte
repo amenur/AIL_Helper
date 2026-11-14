@@ -5,6 +5,7 @@
     AGENT_DOWNLOAD_URL,
     detectInBrowser,
     fetchAgentReport,
+    isSoftwareRenderer,
     profileFromAgent,
     profileFromBrowser,
     type BrowserDetection,
@@ -137,7 +138,11 @@
       <p class="mt-4 rounded-lg border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-amber-200/90">
         El navegador no puede leer la VRAM ni la RAM exacta (como mucho informa de 8 GB).
         {#if hw.detectedGpuName && !gpu}
-          Ha detectado <code class="text-amber-100">{hw.detectedGpuName}</code>, pero no está en el catálogo.
+          {#if isSoftwareRenderer(hw.detectedGpuName)}
+            Tu navegador tiene la aceleración gráfica desactivada, así que no puede identificar la GPU.
+          {:else}
+            Ha detectado <code class="text-amber-100">{hw.detectedGpuName}</code>, pero no está en el catálogo.
+          {/if}
         {/if}
         Revisa los valores abajo, o
         <a class="underline hover:text-amber-100" href={AGENT_DOWNLOAD_URL} target="_blank" rel="noopener">instala el agente local</a>
