@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PairAgent from '../components/PairAgent.svelte';
+---
+
+<Layout title="Vincular el agente · AIL Helper" description="Vincula esta web con el agente local de AIL Helper.">
+  <div class="py-16">
+    <PairAgent client:only="svelte" />
+  </div>
+</Layout>

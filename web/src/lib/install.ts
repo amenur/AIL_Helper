@@ -82,9 +82,11 @@ export function buildInstallPlan(model: Model, est: Estimate, gpu: Gpu | null, o
           `$env:OPENAI_API_BASE_URL="${api}"`,
           `$env:OPENAI_API_KEY="none"`,
           `$env:ENABLE_OLLAMA_API="false"`,
+          // Sin las herramientas integradas: añaden miles de tokens que no caben en contextos locales.
+          `$env:DEFAULT_MODEL_PARAMS='{"function_calling":"legacy"}'`,
           `uvx --python 3.11 open-webui@latest serve --port ${WEBUI_PORT}`,
         ].join('; ')
-      : `DATA_DIR=~/.open-webui OPENAI_API_BASE_URL=${api} OPENAI_API_KEY=none ENABLE_OLLAMA_API=false \\\n  uvx --python 3.11 open-webui@latest serve --port ${WEBUI_PORT}`;
+      : `DATA_DIR=~/.open-webui OPENAI_API_BASE_URL=${api} OPENAI_API_KEY=none ENABLE_OLLAMA_API=false \\\n  DEFAULT_MODEL_PARAMS='{"function_calling":"legacy"}' uvx --python 3.11 open-webui@latest serve --port ${WEBUI_PORT}`;
 
   return {
     ...backend,

@@ -38,7 +38,7 @@ const steps = [
   {
     n: '03',
     title: 'Instala y chatea',
-    text: 'Te indicamos el build de llama.cpp para tu GPU, el modelo de Hugging Face y cómo arrancar Open WebUI, con los comandos listos para copiar. Pronto, con un clic desde el agente.',
+    text: 'Te indicamos el build de llama.cpp para tu GPU, el modelo de Hugging Face y cómo arrancar Open WebUI, y con el agente lo instala y arranca todo con un clic. Sin él, te damos los comandos listos para copiar.',
     icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
   },
 ];
@@ -58,7 +58,7 @@ const faqs = [
   },
   {
     q: '¿Qué es el agente local y es seguro?',
-    a: 'Es un pequeño programa en Rust que lee el hardware exacto de tu equipo, algo que un navegador no puede hacer. Solo escucha en tu propio ordenador (127.0.0.1), solo responde a esta web y no tiene ninguna operación que modifique tu sistema. Es opcional: la web funciona sin él.',
+    a: 'Es un pequeño programa en Rust que lee el hardware exacto de tu equipo (algo que un navegador no puede hacer) y, si se lo pides, instala y arranca el chat. Solo escucha en tu propio ordenador (127.0.0.1) y solo acepta órdenes de esta web después de vincularla con un código secreto. Únicamente instala, dentro de tu carpeta de usuario, llama.cpp, Open WebUI y los modelos del catálogo; nunca ejecuta comandos arbitrarios. Es opcional: la web funciona sin él.',
   },
   {
     q: '¿Mis conversaciones salen de mi ordenador?',
@@ -255,8 +255,8 @@ const faqs = [
       <article class="reveal glass p-7 md:col-span-4">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <h3 class="text-lg font-semibold text-slate-100">Instalación sin misterios</h3>
-          <span class="rounded-full border border-amber-300/30 bg-amber-300/10 px-2.5 py-0.5 text-xs text-amber-200">
-            Hoy: comandos para copiar · Pronto: un clic
+          <span class="rounded-full border border-lime-300/30 bg-lime-300/10 px-2.5 py-0.5 text-xs text-lime-200">
+            Con el agente: un clic · Sin él: comandos
           </span>
         </div>
         <p class="mt-2 text-slate-400">
@@ -301,7 +301,7 @@ const faqs = [
           [
             ['Web', 'Esta página · Astro', ['Catálogo de modelos', 'Motor de estimación', 'Simulador de chat']],
             null,
-            ['Agente local', 'Rust · 127.0.0.1:47800', ['Detección exacta de hardware', 'CORS y Host restringidos', 'Instalación automática (próximamente)']],
+            ['Agente local', 'Rust · 127.0.0.1:47800', ['Detección exacta de hardware', 'CORS y Host restringidos', 'Instalación con un clic']],
             null,
             ['Tu IA', 'llama.cpp + Open WebUI', ['API compatible con OpenAI', 'Chat en localhost:3000', 'Sin conexión a internet']],
           ].map((col) =>

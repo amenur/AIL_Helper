@@ -13,6 +13,6 @@ export default defineConfig({
   // ("del<strong>5 %</strong>" → "del5 %"). El ahorro es mínimo; se desactiva.
   compressHTML: false,
   // El sitemap necesita la URL absoluta del sitio, que solo existe en el despliegue.
-  integrations: [svelte(), ...(process.env.SITE ? [sitemap()] : [])],
+  integrations: [svelte(), ...(process.env.SITE ? [sitemap({ filter: (page) => !page.includes('/vincular') })] : [])],
   vite: { plugins: [tailwindcss()] },
 });

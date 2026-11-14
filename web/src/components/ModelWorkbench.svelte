@@ -11,7 +11,7 @@
     defaultContext,
   } from '../lib/estimate.ts';
   import { buildInstallPlan, guessOs, type OsFamily } from '../lib/install.ts';
-  import { AGENT_DOWNLOAD_URL } from '../lib/hardware.ts';
+  import AgentInstall from './AgentInstall.svelte';
   import { gb, tps, ctxLabel, RATING_CLASS } from '../lib/format.ts';
   import type { Gpu, Model } from '../lib/types.ts';
 
@@ -229,27 +229,14 @@ Con esta configuración puedes hacerte una idea de cómo se sentirá el chat en 
         </div>
       </div>
 
-      <div class="mt-5 rounded-lg border border-sky-400/30 bg-sky-400/5 p-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p class="font-medium text-sky-100">
-              Agente local {#if hw.source === 'agent'}<span class="text-lime-300">· conectado ✓</span>{/if}
-            </p>
-            <p class="text-xs text-sky-200/70">
-              {#if hw.source === 'agent'}
-                Los datos de tu equipo son exactos. La instalación con un clic llegará en la próxima versión del agente.
-              {:else}
-                Descárgalo y ejecútalo para obtener datos exactos de tu equipo; pronto también instalará todo con un clic.
-              {/if}
-            </p>
-          </div>
-          {#if hw.source !== 'agent'}
-            <a class="btn" href={AGENT_DOWNLOAD_URL} target="_blank" rel="noopener">Descargar agente</a>
-          {/if}
-        </div>
+      <div class="mt-5">
+        <AgentInstall {model} quant={est.quant} {context} gpuLayers={plan.gpuLayers} />
       </div>
 
-      <h3 class="mt-6 text-sm font-semibold text-slate-300">Instalación manual</h3>
+      <details class="group mt-6">
+        <summary class="cursor-pointer text-sm font-semibold text-slate-300 hover:text-slate-100">
+          Prefiero instalarlo a mano <span class="text-slate-500 group-open:hidden">(ver comandos)</span>
+        </summary>
       <ol class="mt-3 space-y-5 text-sm">
         <li>
           <p class="text-slate-200">1. Descarga llama.cpp desde <a class="text-sky-300 hover:underline" href="https://github.com/ggml-org/llama.cpp/releases/latest" target="_blank" rel="noopener">las releases oficiales</a> y descomprímelo:</p>
@@ -286,6 +273,7 @@ Con esta configuración puedes hacerte una idea de cómo se sentirá el chat en 
           <p class="text-slate-200">5. Abre <span class="font-mono text-sky-300">{plan.chatUrl}</span>, crea la cuenta de administrador local y empieza a chatear.</p>
         </li>
       </ol>
+      </details>
     </section>
   {/if}
 {/if}
