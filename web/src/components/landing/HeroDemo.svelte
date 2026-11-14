@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { recommend, RATING_LABEL } from '../../lib/estimate.ts';
-  import { DEMO_MACHINES, tokenize, type DemoMachine } from '../../lib/demo.ts';
+  import { DEMO_ANSWER, DEMO_MACHINES, DEMO_QUESTION, tokenize, type DemoMachine } from '../../lib/demo.ts';
   import { READING_TOKS, wps, RATING_CLASS } from '../../lib/format.ts';
   import { $hardware as hardware } from '../../lib/store.ts';
   import type { Gpu, Model } from '../../lib/types.ts';
@@ -10,7 +10,8 @@
 
   const SHOWN = ['llama-3.2-3b', 'qwen3-8b', 'gpt-oss-20b', 'qwen3-32b'];
   const ROTATE_MS = 6000;
-  const TEXT = tokenize('Claro, aquí tienes un resumen de tres puntos sobre cómo funciona la memoria en un modelo local…');
+  // Misma pregunta que la carrera de la landing; aquí basta con el primer párrafo.
+  const TEXT = tokenize(DEMO_ANSWER.split('\n\n')[0]);
 
   let index = $state(2);
   let mounted = $state(false);
@@ -162,9 +163,17 @@
         <span>Simulación · Qwen3 8B</span>
         <span>{wps(chat?.genTokS ?? 0)} palabras/s</span>
       </div>
-      <p class="mt-2 h-12 overflow-hidden text-sm leading-relaxed text-slate-300">
-        {TEXT.slice(0, typed).join('')}<span class="animate-pulse text-sky-300">▍</span>
+      <p class="mt-3 ml-auto w-fit max-w-[90%] rounded-2xl rounded-br-sm bg-sky-500/15 px-3 py-1.5 text-xs text-sky-50">
+        {DEMO_QUESTION}
       </p>
+      <!-- Anclado abajo: siempre se ve lo último que se ha escrito, como en un chat. -->
+      <div
+        class="relative mt-2 h-[4.5rem] overflow-hidden text-sm leading-relaxed text-slate-300 [mask-image:linear-gradient(to_bottom,transparent,#000_1.5rem)]"
+      >
+        <p class="absolute inset-x-0 bottom-0">
+          {TEXT.slice(0, typed).join('')}{#if typed < TEXT.length}<span class="animate-pulse text-sky-300">▍</span>{/if}
+        </p>
+      </div>
     </div>
   </div>
 </div>
