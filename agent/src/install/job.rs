@@ -243,7 +243,8 @@ impl Agent {
         // El cerrojo se toma solo para parar y guardar procesos: arrancar puede tardar
         // minutos y /v1/status debe seguir respondiendo mientras tanto.
         self.services.lock().await.stop().await;
-        let llama = services::start_llama(paths, &llama_server, &model_file, req.context, req.gpu_layers).await?;
+        let alias = format!("{} · {}", model.name, req.quant);
+        let llama = services::start_llama(paths, &llama_server, &model_file, req.context, req.gpu_layers, &alias).await?;
         self.services.lock().await.llama = Some(llama);
         self.set("start", StepState::Running, "Arrancando Open WebUI (el primer arranque tarda más)…");
         let webui = services::start_webui(paths).await?;

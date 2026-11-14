@@ -48,5 +48,5 @@ Ver [`agent/README.md`](agent/README.md). Con el agente en marcha, la web muestr
 
 1. ✅ Web: catálogo, detección aproximada en el navegador, simulador e instrucciones de instalación.
 2. ✅ Agente Rust: `GET /v1/hardware` con datos exactos.
-3. Agente Rust: instalación automática de llama.cpp, del modelo y de Open WebUI.
+3. ✅ Agente Rust: instalación con un clic de llama.cpp, del modelo y de Open WebUI.
 4. Icono en la bandeja, arranque automático, versión de escritorio con Tauri.

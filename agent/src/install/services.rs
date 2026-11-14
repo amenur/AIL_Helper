@@ -73,6 +73,7 @@ pub async fn start_llama(
     model: &Path,
     context: u32,
     gpu_layers: u32,
+    alias: &str,
 ) -> Result<Child> {
     if !port_free(LLAMA_PORT) {
         bail!("el puerto {LLAMA_PORT} está ocupado: cierra el programa que lo usa e inténtalo de nuevo");
@@ -84,6 +85,8 @@ pub async fn start_llama(
         .args(["-c", &context.to_string()])
         .args(["-ngl", &gpu_layers.to_string()])
         .args(["--jinja", "--host", "127.0.0.1", "--port", &LLAMA_PORT.to_string()])
+        // Nombre legible en Open WebUI (si no, muestra la ruta completa del .gguf).
+        .args(["--alias", alias])
         .current_dir(server.parent().unwrap_or(Path::new(".")))
         .stdout(log.try_clone()?)
         .stderr(log)
@@ -109,6 +112,10 @@ pub async fn start_webui(paths: &Paths) -> Result<Child> {
         .env("OPENAI_API_BASE_URL", format!("http://127.0.0.1:{LLAMA_PORT}/v1"))
         .env("OPENAI_API_KEY", "none")
         .env("ENABLE_OLLAMA_API", "False")
+        // Las herramientas integradas (búsqueda, memoria, notas…) añaden miles de tokens de
+        // definiciones a cada mensaje: con modelos locales y contextos de 4–8K no caben.
+        // Solo se aplica en el primer arranque; el usuario puede cambiarlo en los ajustes.
+        .env("DEFAULT_MODEL_PARAMS", r#"{"function_calling":"legacy"}"#)
         // Un solo usuario local: sin pantalla de registro ni contraseña.
         .env("WEBUI_AUTH", "False")
         // Open WebUI guarda su clave secreta (.webui_secret_key) en el directorio actual:
