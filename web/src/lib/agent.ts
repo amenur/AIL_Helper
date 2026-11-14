@@ -100,6 +100,8 @@ export interface AgentStatus {
     llamaBackend: string | null;
   };
   services: { llama: boolean; webui: boolean };
+  /** Componentes ya instalados (versiones del agente ≥ 0.2.0). */
+  installed?: { llama: boolean; webui: boolean };
 }
 
 export interface InstallRequest {
@@ -112,3 +114,21 @@ export interface InstallRequest {
 export const status = () => call<AgentStatus>('GET', '/v1/status');
 export const install = (req: InstallRequest) => call<{ started: boolean }>('POST', '/v1/install', req);
 export const stop = () => call<{ stopped: boolean }>('POST', '/v1/stop');
+
+/** Marca que el usuario está en el asistente de /empezar (la página /vincular vuelve a él). */
+const WIZARD_KEY = 'ail-helper:wizard';
+export function setWizardActive(active: boolean) {
+  try {
+    if (active) localStorage.setItem(WIZARD_KEY, '1');
+    else localStorage.removeItem(WIZARD_KEY);
+  } catch {
+    /* sin almacenamiento */
+  }
+}
+export function wizardActive(): boolean {
+  try {
+    return localStorage.getItem(WIZARD_KEY) === '1';
+  } catch {
+    return false;
+  }
+}

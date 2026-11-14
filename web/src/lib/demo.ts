@@ -23,9 +23,9 @@ const profile = (cpuThreads: number, ramGB: number, gpuId: string | null): Hardw
 
 /** Equipos de ejemplo para las demos de la landing. */
 export const DEMO_MACHINES: DemoMachine[] = [
-  { id: 'laptop', label: 'Portátil sin GPU', detail: '16 hilos · 16 GB DDR5', gpuId: null, hw: profile(16, 16, null) },
-  { id: 'rtx4060', label: 'PC gaming', detail: 'RTX 4060 8 GB · 32 GB', gpuId: 'rtx-4060', hw: profile(12, 32, 'rtx-4060') },
-  { id: 'rtx4090', label: 'Workstation', detail: 'RTX 4090 24 GB · 64 GB', gpuId: 'rtx-4090', hw: profile(24, 64, 'rtx-4090') },
+  { id: 'laptop', label: 'Portátil normal', detail: 'Sin tarjeta gráfica · 16 GB de RAM', gpuId: null, hw: profile(16, 16, null) },
+  { id: 'rtx4060', label: 'Con tarjeta gráfica', detail: 'Gama media (RTX 4060) · 32 GB', gpuId: 'rtx-4060', hw: profile(12, 32, 'rtx-4060') },
+  { id: 'rtx4090', label: 'Ordenador potente', detail: 'Gama alta (RTX 4090) · 64 GB', gpuId: 'rtx-4090', hw: profile(24, 64, 'rtx-4090') },
 ];
 
 /** Pregunta y respuesta de la carrera de velocidad de la landing. */

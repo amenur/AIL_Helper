@@ -5,6 +5,9 @@ export const AGENT_URL = 'http://127.0.0.1:47800';
 
 /** Descarga del agente (binarios publicados por el workflow de releases). */
 export const AGENT_DOWNLOAD_URL = 'https://github.com/amenur/AIL_Helper/releases/latest';
+/** Descarga directa del ejecutable de la última release. */
+export const AGENT_WINDOWS_URL = `${AGENT_DOWNLOAD_URL}/download/ail-agent-windows-x64.exe`;
+export const AGENT_LINUX_URL = `${AGENT_DOWNLOAD_URL}/download/ail-agent-linux-x64`;
 
 function normalize(s: string): string {
   return s

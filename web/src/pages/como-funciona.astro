@@ -1,10 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Validation from '../components/landing/Validation.astro';
+import { getGpus } from '../lib/catalog.ts';
+import { url } from '../lib/url.ts';
+
+const gpus = await getGpus();
 ---
 
-<Layout title="Cómo funciona AIL Helper">
+<Layout title="Cómo funciona por dentro · AIL Helper" description="Detalles técnicos: detección de hardware, estimación de velocidad, agente local en Rust, llama.cpp y Open WebUI.">
   <article class="max-w-3xl space-y-8 text-slate-300">
-    <h1 class="text-3xl font-bold tracking-tight text-slate-50">Cómo funciona</h1>
+    <h1 class="text-3xl font-bold tracking-tight text-slate-50">Cómo funciona por dentro</h1>
+    <p>
+      Esta página es para perfiles técnicos. Si solo quieres usar tu asistente, <a class="text-sky-300 hover:underline" href={url('/empezar')}>empieza aquí</a>;
+      para elegir modelo, cuantización y contexto a mano, usa el <a class="text-sky-300 hover:underline" href={url('/analizar')}>modo avanzado</a>.
+    </p>
 
     <section class="space-y-3">
       <h2 class="text-xl font-semibold text-slate-100">1. Detección del hardware</h2>
@@ -51,4 +60,5 @@ import Layout from '../layouts/Layout.astro';
       <p>El agente local automatizará todos estos pasos y verificará cada descarga.</p>
     </section>
   </article>
+  <Validation {gpus} />
 </Layout>
