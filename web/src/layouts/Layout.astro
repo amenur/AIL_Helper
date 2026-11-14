@@ -1,0 +1,44 @@
+---
+import '../styles/global.css';
+import { url } from '../lib/url.ts';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Analiza tu equipo y descubre qué modelos de IA puedes ejecutar en local, y a qué velocidad.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen">
+    <header class="border-b border-slate-800">
+      <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <a href={url("/")} class="flex items-center gap-2 font-semibold text-slate-100">
+          <img src={url("/favicon.svg")} alt="" class="h-7 w-7" />
+          AIL Helper
+        </a>
+        <div class="flex gap-5 text-sm text-slate-400">
+          <a href={url("/#modelos")} class="hover:text-slate-100">Modelos</a>
+          <a href={url("/como-funciona")} class="hover:text-slate-100">Cómo funciona</a>
+        </div>
+      </nav>
+    </header>
+    <main class="mx-auto max-w-6xl px-4 py-8">
+      <slot />
+    </main>
+    <footer class="mx-auto max-w-6xl px-4 py-10 text-xs text-slate-500">
+      Estimaciones orientativas basadas en ancho de banda de memoria y cómputo; el rendimiento real puede variar ±30 %.
+    </footer>
+  </body>
+</html>

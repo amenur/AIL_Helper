@@ -1,0 +1,430 @@
+[
+  {
+    "id": "llama-3.2-3b",
+    "name": "Llama 3.2 3B Instruct",
+    "family": "Llama 3",
+    "org": "Meta",
+    "paramsB": 3.21,
+    "layers": 28,
+    "kvHeads": 8,
+    "headDim": 128,
+    "maxContext": 131072,
+    "hfRepo": "bartowski/Llama-3.2-3B-Instruct-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "ligero"
+    ],
+    "description": "Modelo pequeño y rápido, válido para tareas sencillas, resúmenes y equipos modestos.",
+    "license": "Llama 3.2 Community"
+  },
+  {
+    "id": "llama-3.1-8b",
+    "name": "Llama 3.1 8B Instruct",
+    "family": "Llama 3",
+    "org": "Meta",
+    "paramsB": 8.03,
+    "layers": 32,
+    "kvHeads": 8,
+    "headDim": 128,
+    "maxContext": 131072,
+    "hfRepo": "bartowski/Meta-Llama-3.1-8B-Instruct-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat"
+    ],
+    "description": "Generalista muy popular; buen equilibrio entre calidad y requisitos.",
+    "license": "Llama 3.1 Community"
+  },
+  {
+    "id": "llama-3.3-70b",
+    "name": "Llama 3.3 70B Instruct",
+    "family": "Llama 3",
+    "org": "Meta",
+    "paramsB": 70.6,
+    "layers": 80,
+    "kvHeads": 8,
+    "headDim": 128,
+    "maxContext": 131072,
+    "hfRepo": "bartowski/Llama-3.3-70B-Instruct-GGUF",
+    "quants": [
+      "Q3_K_M",
+      "Q4_K_M",
+      "Q5_K_M"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "grande"
+    ],
+    "description": "Modelo grande de alta calidad. Necesita mucha memoria (≈ 43 GB en Q4).",
+    "license": "Llama 3.3 Community"
+  },
+  {
+    "id": "qwen3-4b",
+    "name": "Qwen3 4B",
+    "family": "Qwen3",
+    "org": "Alibaba",
+    "paramsB": 4.02,
+    "layers": 36,
+    "kvHeads": 8,
+    "headDim": 128,
+    "maxContext": 32768,
+    "hfRepo": "Qwen/Qwen3-4B-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "razonamiento",
+      "ligero"
+    ],
+    "description": "Pequeño pero capaz, con modo de razonamiento (thinking) activable.",
+    "license": "Apache 2.0"
+  },
+  {
+    "id": "qwen3-8b",
+    "name": "Qwen3 8B",
+    "family": "Qwen3",
+    "org": "Alibaba",
+    "paramsB": 8.19,
+    "layers": 36,
+    "kvHeads": 8,
+    "headDim": 128,
+    "maxContext": 32768,
+    "hfRepo": "Qwen/Qwen3-8B-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "razonamiento"
+    ],
+    "description": "Muy buen rendimiento general y multilingüe, con modo de razonamiento.",
+    "license": "Apache 2.0"
+  },
+  {
+    "id": "qwen3-14b",
+    "name": "Qwen3 14B",
+    "family": "Qwen3",
+    "org": "Alibaba",
+    "paramsB": 14.8,
+    "layers": 40,
+    "kvHeads": 8,
+    "headDim": 128,
+    "maxContext": 32768,
+    "hfRepo": "Qwen/Qwen3-14B-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "razonamiento"
+    ],
+    "description": "Salto de calidad notable respecto al 8B; ideal para GPUs de 12–16 GB.",
+    "license": "Apache 2.0"
+  },
+  {
+    "id": "qwen3-32b",
+    "name": "Qwen3 32B",
+    "family": "Qwen3",
+    "org": "Alibaba",
+    "paramsB": 32.8,
+    "layers": 64,
+    "kvHeads": 8,
+    "headDim": 128,
+    "maxContext": 32768,
+    "hfRepo": "Qwen/Qwen3-32B-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "razonamiento",
+      "grande"
+    ],
+    "description": "Denso de gama alta; cabe en una GPU de 24 GB en Q4.",
+    "license": "Apache 2.0"
+  },
+  {
+    "id": "qwen3-30b-a3b",
+    "name": "Qwen3 30B-A3B (MoE)",
+    "family": "Qwen3",
+    "org": "Alibaba",
+    "paramsB": 30.5,
+    "layers": 48,
+    "kvHeads": 4,
+    "headDim": 128,
+    "maxContext": 32768,
+    "hfRepo": "unsloth/Qwen3-30B-A3B-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "razonamiento",
+      "moe"
+    ],
+    "description": "Mixture-of-Experts: solo ~3,3B parámetros activos por token, así que es rápido incluso con parte en RAM.",
+    "license": "Apache 2.0",
+    "activeParamsB": 3.3
+  },
+  {
+    "id": "gemma-3-4b",
+    "name": "Gemma 3 4B IT",
+    "family": "Gemma 3",
+    "org": "Google",
+    "paramsB": 3.88,
+    "layers": 34,
+    "kvHeads": 4,
+    "headDim": 256,
+    "maxContext": 131072,
+    "hfRepo": "unsloth/gemma-3-4b-it-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "ligero"
+    ],
+    "description": "Compacto y multilingüe, buen candidato para portátiles.",
+    "license": "Gemma",
+    "kvCacheScale": 0.25
+  },
+  {
+    "id": "gemma-3-12b",
+    "name": "Gemma 3 12B IT",
+    "family": "Gemma 3",
+    "org": "Google",
+    "paramsB": 12.2,
+    "layers": 48,
+    "kvHeads": 8,
+    "headDim": 256,
+    "maxContext": 131072,
+    "hfRepo": "unsloth/gemma-3-12b-it-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat"
+    ],
+    "description": "Calidad alta para su tamaño; atención con ventana deslizante que reduce la caché KV.",
+    "license": "Gemma",
+    "kvCacheScale": 0.25
+  },
+  {
+    "id": "gemma-3-27b",
+    "name": "Gemma 3 27B IT",
+    "family": "Gemma 3",
+    "org": "Google",
+    "paramsB": 27.4,
+    "layers": 62,
+    "kvHeads": 16,
+    "headDim": 128,
+    "maxContext": 131072,
+    "hfRepo": "unsloth/gemma-3-27b-it-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "grande"
+    ],
+    "description": "El mayor de la familia Gemma 3; cabe en 24 GB en Q4.",
+    "license": "Gemma",
+    "kvCacheScale": 0.25
+  },
+  {
+    "id": "mistral-small-3.2-24b",
+    "name": "Mistral Small 3.2 24B",
+    "family": "Mistral",
+    "org": "Mistral AI",
+    "paramsB": 23.6,
+    "layers": 40,
+    "kvHeads": 8,
+    "headDim": 128,
+    "maxContext": 131072,
+    "hfRepo": "unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat"
+    ],
+    "description": "Modelo europeo muy sólido en instrucciones y en español.",
+    "license": "Apache 2.0"
+  },
+  {
+    "id": "phi-4",
+    "name": "Phi-4 14B",
+    "family": "Phi",
+    "org": "Microsoft",
+    "paramsB": 14.7,
+    "layers": 40,
+    "kvHeads": 10,
+    "headDim": 128,
+    "maxContext": 16384,
+    "hfRepo": "unsloth/phi-4-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "chat",
+      "razonamiento"
+    ],
+    "description": "Fuerte en razonamiento y matemáticas para su tamaño.",
+    "license": "MIT"
+  },
+  {
+    "id": "gpt-oss-20b",
+    "name": "gpt-oss 20B (MoE)",
+    "family": "gpt-oss",
+    "org": "OpenAI",
+    "paramsB": 20.9,
+    "layers": 24,
+    "kvHeads": 8,
+    "headDim": 64,
+    "maxContext": 131072,
+    "hfRepo": "ggml-org/gpt-oss-20b-GGUF",
+    "quants": [
+      "MXFP4"
+    ],
+    "defaultQuant": "MXFP4",
+    "tags": [
+      "chat",
+      "razonamiento",
+      "moe"
+    ],
+    "description": "MoE con ~3,6B parámetros activos, cuantizado nativamente en MXFP4. Muy rápido para su calidad.",
+    "license": "Apache 2.0",
+    "activeParamsB": 3.6,
+    "kvCacheScale": 0.5
+  },
+  {
+    "id": "gpt-oss-120b",
+    "name": "gpt-oss 120B (MoE)",
+    "family": "gpt-oss",
+    "org": "OpenAI",
+    "paramsB": 116.8,
+    "layers": 36,
+    "kvHeads": 8,
+    "headDim": 64,
+    "maxContext": 131072,
+    "hfRepo": "ggml-org/gpt-oss-120b-GGUF",
+    "quants": [
+      "MXFP4"
+    ],
+    "defaultQuant": "MXFP4",
+    "tags": [
+      "chat",
+      "razonamiento",
+      "moe",
+      "grande"
+    ],
+    "description": "MoE grande (~5,1B activos). Necesita ≈ 64 GB entre VRAM y RAM, pero va sorprendentemente rápido.",
+    "license": "Apache 2.0",
+    "activeParamsB": 5.1,
+    "kvCacheScale": 0.5
+  },
+  {
+    "id": "qwen2.5-coder-7b",
+    "name": "Qwen2.5 Coder 7B Instruct",
+    "family": "Qwen2.5",
+    "org": "Alibaba",
+    "paramsB": 7.62,
+    "layers": 28,
+    "kvHeads": 4,
+    "headDim": 128,
+    "maxContext": 32768,
+    "hfRepo": "Qwen/Qwen2.5-Coder-7B-Instruct-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "código"
+    ],
+    "description": "Especializado en programación; bueno para autocompletado y asistentes de código.",
+    "license": "Apache 2.0"
+  },
+  {
+    "id": "qwen2.5-coder-32b",
+    "name": "Qwen2.5 Coder 32B Instruct",
+    "family": "Qwen2.5",
+    "org": "Alibaba",
+    "paramsB": 32.8,
+    "layers": 64,
+    "kvHeads": 8,
+    "headDim": 128,
+    "maxContext": 32768,
+    "hfRepo": "Qwen/Qwen2.5-Coder-32B-Instruct-GGUF",
+    "quants": [
+      "Q4_K_M",
+      "Q5_K_M",
+      "Q6_K",
+      "Q8_0"
+    ],
+    "defaultQuant": "Q4_K_M",
+    "tags": [
+      "código",
+      "grande"
+    ],
+    "description": "Uno de los mejores modelos abiertos para código en su tamaño.",
+    "license": "Apache 2.0"
+  }
+]
