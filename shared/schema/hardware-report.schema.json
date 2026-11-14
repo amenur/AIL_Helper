@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ail-helper.local/schema/hardware-report.schema.json",
+  "title": "HardwareReport",
+  "description": "Respuesta de GET /v1/hardware del agente local (Rust). La web la consume para sustituir la detección aproximada del navegador.",
+  "type": "object",
+  "required": ["schemaVersion", "agentVersion", "os", "cpu", "memory", "gpus"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "agentVersion": { "type": "string" },
+    "os": {
+      "type": "object",
+      "required": ["family", "name", "arch"],
+      "properties": {
+        "family": { "enum": ["windows", "linux", "macos"] },
+        "name": { "type": "string", "description": "p. ej. \"Windows 11 Pro 24H2\", \"Ubuntu 24.04\"" },
+        "arch": { "enum": ["x86_64", "aarch64"] }
+      }
+    },
+    "cpu": {
+      "type": "object",
+      "required": ["name", "physicalCores", "logicalCores"],
+      "properties": {
+        "name": { "type": "string" },
+        "physicalCores": { "type": "integer", "minimum": 1 },
+        "logicalCores": { "type": "integer", "minimum": 1 },
+        "flags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Extensiones relevantes para llama.cpp: avx2, avx512f, f16c, fma, neon…"
+        }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "required": ["totalGB", "availableGB"],
+      "properties": {
+        "totalGB": { "type": "number" },
+        "availableGB": { "type": "number" },
+        "type": { "enum": ["ddr4", "ddr5", "lpddr5", "lpddr5x", "unknown"] },
+        "speedMTs": { "type": ["integer", "null"] },
+        "channels": { "type": ["integer", "null"] }
+      }
+    },
+    "gpus": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["vendor", "name", "vramGB"],
+        "properties": {
+          "vendor": { "enum": ["nvidia", "amd", "intel", "apple", "other"] },
+          "name": { "type": "string" },
+          "vramGB": { "type": "number" },
+          "vramFreeGB": { "type": ["number", "null"] },
+          "driverVersion": { "type": ["string", "null"] },
+          "cudaVersion": { "type": ["string", "null"] },
+          "computeCapability": { "type": ["string", "null"] },
+          "backends": {
+            "type": "array",
+            "items": { "enum": ["cuda", "rocm", "vulkan", "metal", "sycl", "cpu"] },
+            "description": "Backends de llama.cpp utilizables en este equipo"
+          }
+        }
+      }
+    },
+    "disk": {
+      "type": "object",
+      "properties": {
+        "installPath": { "type": "string" },
+        "freeGB": { "type": "number" }
+      }
+    }
+  }
+}

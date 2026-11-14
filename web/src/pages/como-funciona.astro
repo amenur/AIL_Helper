@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Cómo funciona AIL Helper">
+  <article class="max-w-3xl space-y-8 text-slate-300">
+    <h1 class="text-3xl font-bold tracking-tight text-slate-50">Cómo funciona</h1>
+
+    <section class="space-y-3">
+      <h2 class="text-xl font-semibold text-slate-100">1. Detección del hardware</h2>
+      <p>
+        Desde el navegador solo se puede obtener una aproximación: el número de hilos de CPU, el nombre de la GPU (vía WebGL/WebGPU)
+        y una RAM redondeada con tope de 8 GB. La VRAM no es accesible. Por eso puedes corregir cualquier valor a mano.
+      </p>
+      <p>
+        Para obtener datos exactos (VRAM, tipo y velocidad de RAM, versión de CUDA, extensiones de la CPU), el <strong>agente local</strong>
+        escrito en Rust expone una API en <code class="text-sky-300">127.0.0.1</code> que esta web consulta automáticamente si está en marcha.
+      </p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="text-xl font-semibold text-slate-100">2. Estimación de velocidad</h2>
+      <p>
+        Al generar texto, llama.cpp tiene que leer de memoria todos los pesos activos del modelo para producir cada token.
+        Por eso la velocidad de generación se aproxima como:
+      </p>
+      <p class="card font-mono text-sm text-sky-200">tokens/s ≈ ancho de banda efectivo ÷ tamaño del modelo en memoria</p>
+      <p>
+        Si el modelo no cabe entero en la VRAM, una parte se queda en la RAM del sistema, mucho más lenta, y esa parte domina el tiempo.
+        En los modelos <em>Mixture-of-Experts</em> solo se leen los expertos activos, por eso van mucho más rápido que un modelo denso del mismo tamaño.
+        La lectura del prompt, en cambio, depende de la potencia de cálculo (FLOPS).
+      </p>
+      <p class="text-sm text-slate-500">Son estimaciones orientativas (±30 %): drivers, versión de llama.cpp y configuración influyen.</p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="text-xl font-semibold text-slate-100">3. Instalación</h2>
+      <ul class="list-disc space-y-1 pl-5">
+        <li><strong>llama.cpp</strong> (<code>llama-server</code>): el binario adecuado a tu GPU (CUDA, HIP, Vulkan o CPU), que expone una API compatible con OpenAI.</li>
+        <li><strong>Modelo GGUF</strong> de Hugging Face, descargado por el propio <code>llama-server -hf</code>.</li>
+        <li><strong>Open WebUI</strong>, instalado con <code>uv</code> (sin necesidad de tener Python) y conectado a llama.cpp.</li>
+      </ul>
+      <p>El agente local automatizará todos estos pasos y verificará cada descarga.</p>
+    </section>
+  </article>
+</Layout>

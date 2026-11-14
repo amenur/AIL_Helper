@@ -1,0 +1,584 @@
+[
+  {
+    "id": "gtx-1660-super",
+    "vendor": "nvidia",
+    "name": "GeForce GTX 1660 Super",
+    "vramGB": 6,
+    "bandwidthGBs": 336,
+    "fp16Tflops": 10,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-2060",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 2060",
+    "vramGB": 6,
+    "bandwidthGBs": 336,
+    "fp16Tflops": 26,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-2070",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 2070",
+    "vramGB": 8,
+    "bandwidthGBs": 448,
+    "fp16Tflops": 30,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-2080-ti",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 2080 Ti",
+    "vramGB": 11,
+    "bandwidthGBs": 616,
+    "fp16Tflops": 54,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-3050",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 3050",
+    "vramGB": 8,
+    "bandwidthGBs": 224,
+    "fp16Tflops": 18,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-3060",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 3060",
+    "vramGB": 12,
+    "bandwidthGBs": 360,
+    "fp16Tflops": 25,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-3060-ti",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 3060 Ti",
+    "vramGB": 8,
+    "bandwidthGBs": 448,
+    "fp16Tflops": 32,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-3070",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 3070",
+    "vramGB": 8,
+    "bandwidthGBs": 448,
+    "fp16Tflops": 40,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-3080",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 3080",
+    "vramGB": 10,
+    "bandwidthGBs": 760,
+    "fp16Tflops": 60,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-3090",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 3090",
+    "vramGB": 24,
+    "bandwidthGBs": 936,
+    "fp16Tflops": 71,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4060",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4060",
+    "vramGB": 8,
+    "bandwidthGBs": 272,
+    "fp16Tflops": 60,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4060-ti",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4060 Ti",
+    "vramGB": 8,
+    "bandwidthGBs": 288,
+    "fp16Tflops": 88,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4060-ti-16gb",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4060 Ti 16GB",
+    "vramGB": 16,
+    "bandwidthGBs": 288,
+    "fp16Tflops": 88,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4070",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4070",
+    "vramGB": 12,
+    "bandwidthGBs": 504,
+    "fp16Tflops": 117,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4070-super",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4070 Super",
+    "vramGB": 12,
+    "bandwidthGBs": 504,
+    "fp16Tflops": 142,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4070-ti",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4070 Ti",
+    "vramGB": 12,
+    "bandwidthGBs": 504,
+    "fp16Tflops": 160,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4070-ti-super",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4070 Ti Super",
+    "vramGB": 16,
+    "bandwidthGBs": 672,
+    "fp16Tflops": 177,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4080",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4080",
+    "vramGB": 16,
+    "bandwidthGBs": 717,
+    "fp16Tflops": 195,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4080-super",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4080 Super",
+    "vramGB": 16,
+    "bandwidthGBs": 736,
+    "fp16Tflops": 209,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-4090",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4090",
+    "vramGB": 24,
+    "bandwidthGBs": 1008,
+    "fp16Tflops": 165,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-5060-ti",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 5060 Ti",
+    "vramGB": 16,
+    "bandwidthGBs": 448,
+    "fp16Tflops": 95,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-5070",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 5070",
+    "vramGB": 12,
+    "bandwidthGBs": 672,
+    "fp16Tflops": 123,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-5070-ti",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 5070 Ti",
+    "vramGB": 16,
+    "bandwidthGBs": 896,
+    "fp16Tflops": 176,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-5080",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 5080",
+    "vramGB": 16,
+    "bandwidthGBs": 960,
+    "fp16Tflops": 225,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-5090",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 5090",
+    "vramGB": 32,
+    "bandwidthGBs": 1792,
+    "fp16Tflops": 419,
+    "backend": "cuda",
+    "laptop": false
+  },
+  {
+    "id": "rtx-3060-laptop-gpu",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 3060 Laptop GPU",
+    "vramGB": 6,
+    "bandwidthGBs": 336,
+    "fp16Tflops": 22,
+    "backend": "cuda",
+    "laptop": true
+  },
+  {
+    "id": "rtx-4050-laptop-gpu",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4050 Laptop GPU",
+    "vramGB": 6,
+    "bandwidthGBs": 192,
+    "fp16Tflops": 40,
+    "backend": "cuda",
+    "laptop": true
+  },
+  {
+    "id": "rtx-4060-laptop-gpu",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4060 Laptop GPU",
+    "vramGB": 8,
+    "bandwidthGBs": 256,
+    "fp16Tflops": 55,
+    "backend": "cuda",
+    "laptop": true
+  },
+  {
+    "id": "rtx-4070-laptop-gpu",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4070 Laptop GPU",
+    "vramGB": 8,
+    "bandwidthGBs": 256,
+    "fp16Tflops": 70,
+    "backend": "cuda",
+    "laptop": true
+  },
+  {
+    "id": "rtx-4080-laptop-gpu",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4080 Laptop GPU",
+    "vramGB": 12,
+    "bandwidthGBs": 432,
+    "fp16Tflops": 120,
+    "backend": "cuda",
+    "laptop": true
+  },
+  {
+    "id": "rtx-4090-laptop-gpu",
+    "vendor": "nvidia",
+    "name": "GeForce RTX 4090 Laptop GPU",
+    "vramGB": 16,
+    "bandwidthGBs": 576,
+    "fp16Tflops": 150,
+    "backend": "cuda",
+    "laptop": true
+  },
+  {
+    "id": "rx-6600",
+    "vendor": "amd",
+    "name": "Radeon RX 6600",
+    "vramGB": 8,
+    "bandwidthGBs": 224,
+    "fp16Tflops": 18,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-6700-xt",
+    "vendor": "amd",
+    "name": "Radeon RX 6700 XT",
+    "vramGB": 12,
+    "bandwidthGBs": 384,
+    "fp16Tflops": 26,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-6800-xt",
+    "vendor": "amd",
+    "name": "Radeon RX 6800 XT",
+    "vramGB": 16,
+    "bandwidthGBs": 512,
+    "fp16Tflops": 41,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-6900-xt",
+    "vendor": "amd",
+    "name": "Radeon RX 6900 XT",
+    "vramGB": 16,
+    "bandwidthGBs": 512,
+    "fp16Tflops": 46,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-7600",
+    "vendor": "amd",
+    "name": "Radeon RX 7600",
+    "vramGB": 8,
+    "bandwidthGBs": 288,
+    "fp16Tflops": 43,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-7700-xt",
+    "vendor": "amd",
+    "name": "Radeon RX 7700 XT",
+    "vramGB": 12,
+    "bandwidthGBs": 432,
+    "fp16Tflops": 70,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-7800-xt",
+    "vendor": "amd",
+    "name": "Radeon RX 7800 XT",
+    "vramGB": 16,
+    "bandwidthGBs": 624,
+    "fp16Tflops": 74,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-7900-xt",
+    "vendor": "amd",
+    "name": "Radeon RX 7900 XT",
+    "vramGB": 20,
+    "bandwidthGBs": 800,
+    "fp16Tflops": 103,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-7900-xtx",
+    "vendor": "amd",
+    "name": "Radeon RX 7900 XTX",
+    "vramGB": 24,
+    "bandwidthGBs": 960,
+    "fp16Tflops": 123,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-9070",
+    "vendor": "amd",
+    "name": "Radeon RX 9070",
+    "vramGB": 16,
+    "bandwidthGBs": 640,
+    "fp16Tflops": 145,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "rx-9070-xt",
+    "vendor": "amd",
+    "name": "Radeon RX 9070 XT",
+    "vramGB": 16,
+    "bandwidthGBs": 640,
+    "fp16Tflops": 195,
+    "backend": "rocm",
+    "laptop": false
+  },
+  {
+    "id": "arc-a750",
+    "vendor": "intel",
+    "name": "Arc A750",
+    "vramGB": 8,
+    "bandwidthGBs": 512,
+    "fp16Tflops": 30,
+    "backend": "vulkan",
+    "laptop": false
+  },
+  {
+    "id": "arc-a770",
+    "vendor": "intel",
+    "name": "Arc A770",
+    "vramGB": 16,
+    "bandwidthGBs": 560,
+    "fp16Tflops": 39,
+    "backend": "vulkan",
+    "laptop": false
+  },
+  {
+    "id": "arc-b580",
+    "vendor": "intel",
+    "name": "Arc B580",
+    "vramGB": 12,
+    "bandwidthGBs": 456,
+    "fp16Tflops": 58,
+    "backend": "vulkan",
+    "laptop": false
+  },
+  {
+    "id": "apple-m1",
+    "vendor": "apple",
+    "name": "Apple M1",
+    "vramGB": 0,
+    "bandwidthGBs": 68,
+    "fp16Tflops": 2.6,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m1-pro",
+    "vendor": "apple",
+    "name": "Apple M1 Pro",
+    "vramGB": 0,
+    "bandwidthGBs": 200,
+    "fp16Tflops": 5.2,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m1-max",
+    "vendor": "apple",
+    "name": "Apple M1 Max",
+    "vramGB": 0,
+    "bandwidthGBs": 400,
+    "fp16Tflops": 10.4,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m2",
+    "vendor": "apple",
+    "name": "Apple M2",
+    "vramGB": 0,
+    "bandwidthGBs": 100,
+    "fp16Tflops": 3.6,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m2-pro",
+    "vendor": "apple",
+    "name": "Apple M2 Pro",
+    "vramGB": 0,
+    "bandwidthGBs": 200,
+    "fp16Tflops": 6.8,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m2-max",
+    "vendor": "apple",
+    "name": "Apple M2 Max",
+    "vramGB": 0,
+    "bandwidthGBs": 400,
+    "fp16Tflops": 13.6,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m3",
+    "vendor": "apple",
+    "name": "Apple M3",
+    "vramGB": 0,
+    "bandwidthGBs": 100,
+    "fp16Tflops": 4.1,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m3-pro",
+    "vendor": "apple",
+    "name": "Apple M3 Pro",
+    "vramGB": 0,
+    "bandwidthGBs": 150,
+    "fp16Tflops": 7.4,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m3-max",
+    "vendor": "apple",
+    "name": "Apple M3 Max",
+    "vramGB": 0,
+    "bandwidthGBs": 400,
+    "fp16Tflops": 16.4,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m4",
+    "vendor": "apple",
+    "name": "Apple M4",
+    "vramGB": 0,
+    "bandwidthGBs": 120,
+    "fp16Tflops": 4.3,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m4-pro",
+    "vendor": "apple",
+    "name": "Apple M4 Pro",
+    "vramGB": 0,
+    "bandwidthGBs": 273,
+    "fp16Tflops": 9.2,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  },
+  {
+    "id": "apple-m4-max",
+    "vendor": "apple",
+    "name": "Apple M4 Max",
+    "vramGB": 0,
+    "bandwidthGBs": 546,
+    "fp16Tflops": 18.4,
+    "backend": "metal",
+    "laptop": false,
+    "unifiedMemory": true
+  }
+]
