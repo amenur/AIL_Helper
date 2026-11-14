@@ -3,6 +3,7 @@
   import { recommend, RATING_LABEL, PLACEMENT_LABEL, type Estimate } from '../lib/estimate.ts';
   import { gb, params, tps, RATING_CLASS } from '../lib/format.ts';
   import type { Gpu, Model } from '../lib/types.ts';
+  import { url } from '../lib/url.ts';
 
   let { models, gpus }: { models: Model[]; gpus: Gpu[] } = $props();
 
@@ -62,7 +63,7 @@
           {#each rows as { model, est } (model.id)}
             <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
               <td class="py-3 pr-3">
-                <a href={`/modelos/${model.id}`} class="font-medium text-slate-100 hover:text-sky-300">{model.name}</a>
+                <a href={url(`/modelos/${model.id}`)} class="font-medium text-slate-100 hover:text-sky-300">{model.name}</a>
                 <div class="text-xs text-slate-500">{model.org} · {model.tags.join(', ')}</div>
               </td>
               <td class="py-3 pr-3 text-slate-300">

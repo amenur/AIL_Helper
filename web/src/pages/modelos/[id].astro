@@ -5,6 +5,7 @@ import ModelWorkbench from '../../components/ModelWorkbench.svelte';
 import { getGpus, getModels } from '../../lib/catalog.ts';
 import { params, ctxLabel } from '../../lib/format.ts';
 import type { Model } from '../../lib/types.ts';
+import { url } from '../../lib/url.ts';
 
 export async function getStaticPaths() {
   const models = await getModels();
@@ -19,7 +20,7 @@ const gpus = await getGpus();
   title={`${model.name}: requisitos y velocidad en local`}
   description={`¿Puedes ejecutar ${model.name} en tu PC? Memoria necesaria, velocidad estimada con llama.cpp e instalación con Open WebUI.`}
 >
-  <a href="/" class="text-sm text-slate-400 hover:text-slate-200">← Todos los modelos</a>
+  <a href={url("/")} class="text-sm text-slate-400 hover:text-slate-200">← Todos los modelos</a>
   <header class="mt-3 mb-6">
     <h1 class="text-3xl font-bold tracking-tight text-slate-50">{model.name}</h1>
     <p class="mt-2 max-w-3xl text-slate-400">{model.description}</p>
