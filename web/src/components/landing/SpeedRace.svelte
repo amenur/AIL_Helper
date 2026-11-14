@@ -1,14 +1,17 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { estimate, RATING_LABEL, PLACEMENT_LABEL } from '../../lib/estimate.ts';
-  import { DEMO_ANSWER, DEMO_MACHINES, tokenize } from '../../lib/demo.ts';
+  import { DEMO_ANSWER, DEMO_MACHINES, DEMO_QUESTION, tokenize } from '../../lib/demo.ts';
   import { tps, wps, readingMultiple, RATING_CLASS } from '../../lib/format.ts';
   import type { Gpu, Model } from '../../lib/types.ts';
 
   let { models, gpus }: { models: Model[]; gpus: Gpu[] } = $props();
 
   const CHOICES = ['qwen3-8b', 'qwen3-14b', 'qwen3-30b-a3b'];
+  // Plantilla de chat + pregunta: unos 60 tokens de prompt.
   const PROMPT_TOKENS = 60;
+  // La carrera se corta aquí: el equipo lento no tiene por qué terminar.
+  const MAX_RACE_S = 45;
   const tokens = tokenize(DEMO_ANSWER);
 
   const choices = $derived(CHOICES.map((id) => models.find((m) => m.id === id)).filter((m): m is Model => !!m));
@@ -42,8 +45,7 @@
     const tick = (now: number) => {
       elapsed = (now - start) / 1000;
       const done = lanes.every((l) => l.est.genTokS <= 0 || shownFor(l.est.genTokS, l.est.prefillTokS) >= tokens.length);
-      // La carrera se corta a los 25 s: el portátil no tiene por qué terminar.
-      if (done || elapsed > 25) {
+      if (done || elapsed > MAX_RACE_S) {
         running = false;
         return;
       }
@@ -90,7 +92,11 @@
     </button>
   </div>
 
-  <div class="mt-8 grid gap-3 md:grid-cols-3 md:gap-4">
+  <div class="mx-auto mt-8 w-fit max-w-full rounded-2xl rounded-br-sm bg-sky-500/15 px-4 py-2.5 text-sm text-sky-50">
+    <span class="mr-2 text-xs uppercase tracking-wider text-sky-300/80">Pregunta</span>{DEMO_QUESTION}
+  </div>
+
+  <div class="mt-6 grid gap-3 md:grid-cols-3 md:gap-4">
     {#each lanes as { machine, est } (machine.id)}
       {@const shown = shownFor(est.genTokS, est.prefillTokS)}
       {@const pct = (shown / tokens.length) * 100}
@@ -124,7 +130,7 @@
             <p class="animate-pulse text-slate-500">Leyendo el prompt…</p>
           {:else}
             <!-- Se ancla abajo para que se vea siempre el final, como en un chat. -->
-            <p class="absolute inset-x-4 bottom-4">
+            <p class="absolute inset-x-4 bottom-4 whitespace-pre-line">
               {tokens.slice(0, shown).join('')}{#if running && shown < tokens.length}<span class="animate-pulse text-sky-300">▍</span>{/if}
             </p>
           {/if}
