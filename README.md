@@ -7,7 +7,7 @@ con **llama.cpp** y ayuda a instalarlo junto con **Open WebUI** como interfaz de
 
 ```
 web/      Web en Astro + Svelte 5 + Tailwind 4 (catálogo, detección, simulador, instalación)
-agent/    Agente local en Rust (pendiente): detección exacta, descargas y configuración
+agent/    Agente local en Rust: detección exacta del hardware (API en 127.0.0.1:47800)
 shared/
   catalog/  models.json y gpus.json: datos compartidos por la web y el agente
   schema/   Contrato JSON entre la web y el agente
@@ -38,9 +38,15 @@ Código en [`web/src/lib/estimate.ts`](web/src/lib/estimate.ts). Son estimacione
 Edita `shared/catalog/models.json` o `shared/catalog/gpus.json`. Astro valida ambos con Zod al compilar,
 y `npm test` comprueba que las cuantizaciones existen y que los ids son únicos.
 
+Web publicada en **https://amenur.github.io/AIL_Helper/** (se despliega en cada push a `main`).
+
+## Agente
+
+Ver [`agent/README.md`](agent/README.md). Con el agente en marcha, la web muestra los datos reales del equipo.
+
 ## Hoja de ruta
 
 1. ✅ Web: catálogo, detección aproximada en el navegador, simulador e instrucciones de instalación.
-2. Agente Rust: `GET /v1/hardware` con datos exactos.
+2. ✅ Agente Rust: `GET /v1/hardware` con datos exactos.
 3. Agente Rust: instalación automática de llama.cpp, del modelo y de Open WebUI.
 4. Icono en la bandeja, arranque automático, versión de escritorio con Tauri.

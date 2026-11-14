@@ -1,0 +1,64 @@
+name: Publicar agente
+
+# Se lanza al crear una etiqueta como "agent-v0.1.0".
+on:
+  push:
+    tags: ['agent-v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            asset: ail-agent-windows-x64.exe
+            bin: ail-agent.exe
+          # Ubuntu 22.04 para enlazar con una glibc antigua y funcionar en más distros.
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            asset: ail-agent-linux-x64
+            bin: ail-agent
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - name: Compilar
+        working-directory: agent
+        run: cargo build --release --locked --target ${{ matrix.target }}
+      - name: Preparar binario y checksum
+        shell: bash
+        run: |
+          mkdir dist
+          cp agent/target/${{ matrix.target }}/release/${{ matrix.bin }} dist/${{ matrix.asset }}
+          cd dist && sha256sum ${{ matrix.asset }} > ${{ matrix.asset }}.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          make_latest: true
+          body: |
+            Agente local de AIL Helper.
+
+            - **Windows**: descarga `ail-agent-windows-x64.exe` y ejecútalo.
+            - **Linux**: descarga `ail-agent-linux-x64`, dale permisos (`chmod +x ail-agent-linux-x64`) y ejecútalo.
+
+            Escucha solo en `http://127.0.0.1:47800`. Abre la web y verás «Datos reales (agente local)».
+            Los ficheros `.sha256` permiten verificar la descarga.

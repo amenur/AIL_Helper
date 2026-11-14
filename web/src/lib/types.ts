@@ -47,4 +47,16 @@ export interface HardwareProfile {
   vramGBOverride?: number | null;
   /** Texto bruto que dio el navegador/agente, para mostrarlo. */
   detectedGpuName?: string | null;
+  /** Datos adicionales que solo da el agente local. */
+  agent?: AgentDetails | null;
+}
+
+export interface AgentDetails {
+  version: string;
+  os: string;
+  cpuName: string;
+  diskFreeGB: number | null;
+  ramSpeedMTs: number | null;
+  driverVersion: string | null;
+  cudaVersion: string | null;
 }
