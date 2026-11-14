@@ -11,6 +11,7 @@
     defaultContext,
   } from '../lib/estimate.ts';
   import { buildInstallPlan, guessOs, type OsFamily } from '../lib/install.ts';
+  import { AGENT_DOWNLOAD_URL } from '../lib/hardware.ts';
   import { gb, tps, ctxLabel, RATING_CLASS } from '../lib/format.ts';
   import type { Gpu, Model } from '../lib/types.ts';
 
@@ -231,10 +232,20 @@ Con esta configuración puedes hacerte una idea de cómo se sentirá el chat en 
       <div class="mt-5 rounded-lg border border-sky-400/30 bg-sky-400/5 p-4">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p class="font-medium text-sky-100">Instalación automática con el agente local</p>
-            <p class="text-xs text-sky-200/70">Detecta tu hardware exacto, descarga y verifica todo, y arranca el chat con un clic.</p>
+            <p class="font-medium text-sky-100">
+              Agente local {#if hw.source === 'agent'}<span class="text-lime-300">· conectado ✓</span>{/if}
+            </p>
+            <p class="text-xs text-sky-200/70">
+              {#if hw.source === 'agent'}
+                Los datos de tu equipo son exactos. La instalación con un clic llegará en la próxima versión del agente.
+              {:else}
+                Descárgalo y ejecútalo para obtener datos exactos de tu equipo; pronto también instalará todo con un clic.
+              {/if}
+            </p>
           </div>
-          <button class="btn" disabled title="El agente en Rust está en desarrollo">Descargar agente · próximamente</button>
+          {#if hw.source !== 'agent'}
+            <a class="btn" href={AGENT_DOWNLOAD_URL} target="_blank" rel="noopener">Descargar agente</a>
+          {/if}
         </div>
       </div>
 

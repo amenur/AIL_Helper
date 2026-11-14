@@ -5,8 +5,21 @@ import { url } from '../lib/url.ts';
 interface Props {
   title: string;
   description?: string;
+  /** Sin contenedor central: la página controla el ancho de cada sección (landing). */
+  fullWidth?: boolean;
 }
-const { title, description = 'Analiza tu equipo y descubre qué modelos de IA puedes ejecutar en local, y a qué velocidad.' } = Astro.props;
+const {
+  title,
+  description = 'Analiza tu equipo y descubre qué modelos de IA puedes ejecutar en local, y a qué velocidad.',
+  fullWidth = false,
+} = Astro.props;
+const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '').replace(/\/$/, '') || '/';
+const nav = [
+  { href: '/#como', label: 'Cómo funciona' },
+  { href: '/#carrera', label: 'Demo' },
+  { href: '/analizar#modelos', label: 'Modelos' },
+  { href: '/#faq', label: 'FAQ' },
+];
 ---
 
 <!doctype html>
@@ -14,31 +27,76 @@ const { title, description = 'Analiza tu equipo y descubre qué modelos de IA pu
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#020617" />
     <title>{title}</title>
   </head>
   <body class="min-h-screen">
-    <header class="border-b border-slate-800">
-      <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <a href={url("/")} class="flex items-center gap-2 font-semibold text-slate-100">
-          <img src={url("/favicon.svg")} alt="" class="h-7 w-7" />
+    <header class="sticky top-0 z-50 border-b border-white/5 bg-slate-950/70 backdrop-blur-xl">
+      <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+        <a href={url('/')} class="flex items-center gap-2 font-semibold text-slate-100">
+          <img src={url('/favicon.svg')} alt="" class="h-7 w-7" />
           AIL Helper
         </a>
-        <div class="flex gap-5 text-sm text-slate-400">
-          <a href={url("/#modelos")} class="hover:text-slate-100">Modelos</a>
-          <a href={url("/como-funciona")} class="hover:text-slate-100">Cómo funciona</a>
+        <div class="flex items-center gap-6 text-sm">
+          <div class="hidden gap-6 text-slate-400 md:flex">
+            {nav.map((n) => <a href={url(n.href)} class="transition-colors hover:text-slate-100">{n.label}</a>)}
+          </div>
+          {
+            path !== '/analizar' && (
+              <a href={url('/analizar')} class="btn py-1.5">
+                Analizar mi equipo
+              </a>
+            )
+          }
         </div>
       </nav>
     </header>
-    <main class="mx-auto max-w-6xl px-4 py-8">
-      <slot />
-    </main>
-    <footer class="mx-auto max-w-6xl px-4 py-10 text-xs text-slate-500">
-      Estimaciones orientativas basadas en ancho de banda de memoria y cómputo; el rendimiento real puede variar ±30 %.
+    {
+      fullWidth ? (
+        <main>
+          <slot />
+        </main>
+      ) : (
+        <main class="mx-auto max-w-6xl px-4 py-8">
+          <slot />
+        </main>
+      )
+    }
+    <footer class="border-t border-white/5">
+      <div class="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 text-sm text-slate-500 sm:flex-row sm:justify-between">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-2 font-semibold text-slate-300">
+            <img src={url('/favicon.svg')} alt="" class="h-6 w-6" /> AIL Helper
+          </div>
+          <p class="mt-2 text-xs">
+            Estimaciones orientativas basadas en ancho de banda de memoria y cómputo; el rendimiento real puede variar ±30 %.
+          </p>
+        </div>
+        <div class="flex gap-10 text-xs">
+          <ul class="space-y-2">
+            <li class="font-medium text-slate-300">Producto</li>
+            <li><a class="hover:text-slate-200" href={url('/analizar')}>Analizar mi equipo</a></li>
+            <li><a class="hover:text-slate-200" href={url('/analizar#modelos')}>Modelos</a></li>
+            <li><a class="hover:text-slate-200" href={url('/como-funciona')}>Metodología</a></li>
+          </ul>
+          <ul class="space-y-2">
+            <li class="font-medium text-slate-300">Proyectos</li>
+            <li><a class="hover:text-slate-200" href="https://github.com/ggml-org/llama.cpp">llama.cpp</a></li>
+            <li><a class="hover:text-slate-200" href="https://openwebui.com">Open WebUI</a></li>
+            <li><a class="hover:text-slate-200" href="https://huggingface.co/models?library=gguf">Hugging Face</a></li>
+          </ul>
+        </div>
+      </div>
     </footer>
   </body>
 </html>

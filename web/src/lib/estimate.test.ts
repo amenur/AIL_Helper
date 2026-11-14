@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { estimate, kvCacheGB, recommend, weightsGB, QUANTS } from './estimate.ts';
-import { matchGpu } from './hardware.ts';
+import { isSoftwareRenderer, matchGpu, profileFromAgent, type AgentHardwareReport } from './hardware.ts';
 import type { Gpu, HardwareProfile, Model } from './types.ts';
 
 const models: Model[] = JSON.parse(readFileSync(new URL('../../../shared/catalog/models.json', import.meta.url), 'utf8'));
@@ -90,4 +90,32 @@ test('matchGpu reconoce renderers de ANGLE y prefiere la coincidencia más larga
   assert.equal(matchGpu('AMD Radeon RX 7900 XTX (radeonsi, navi31, LLVM 17.0.6)', gpus)?.id, 'rx-7900-xtx');
   assert.equal(matchGpu('ANGLE (Apple, ANGLE Metal Renderer: Apple M2 Pro, Unspecified Version)', gpus)?.id, 'apple-m2-pro');
   assert.equal(matchGpu('Mesa Intel(R) UHD Graphics 620', gpus), null);
+});
+
+test('profileFromAgent: ignora la iGPU y usa la VRAM real de la dedicada', () => {
+  const report: AgentHardwareReport = {
+    schemaVersion: 1,
+    agentVersion: '0.1.0',
+    os: { family: 'windows', name: 'Windows 11', arch: 'x86_64' },
+    cpu: { name: 'AMD Ryzen 7 7800X3D', logicalCores: 16 },
+    memory: { totalGB: 31.2, type: 'ddr5', speedMTs: 6000 },
+    gpus: [
+      { vendor: 'amd', name: 'AMD Radeon(TM) Graphics', vramGB: 0, integrated: true },
+      { vendor: 'nvidia', name: 'NVIDIA GeForce RTX 4070 SUPER', vramGB: 12, cudaVersion: '12.8' },
+    ],
+    disk: { freeGB: 412.5 },
+  };
+  const p = profileFromAgent(report, gpus);
+  assert.equal(p.source, 'agent');
+  assert.equal(p.gpuId, 'rtx-4070-super');
+  assert.equal(p.vramGBOverride, 12);
+  assert.equal(p.ramGB, 31);
+  assert.equal(p.ramType, 'ddr5');
+  assert.equal(p.agent?.cudaVersion, '12.8');
+});
+
+test('isSoftwareRenderer detecta renderizado sin GPU', () => {
+  assert.ok(isSoftwareRenderer('ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)'));
+  assert.ok(isSoftwareRenderer('llvmpipe (LLVM 17.0.6, 256 bits)'));
+  assert.ok(!isSoftwareRenderer('ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 (0x00002786) Direct3D11)'));
 });

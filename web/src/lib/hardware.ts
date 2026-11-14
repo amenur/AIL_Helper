@@ -3,6 +3,9 @@ import type { Gpu, HardwareProfile, RamType } from './types.ts';
 /** Dirección del agente local (Rust). Solo escucha en 127.0.0.1. */
 export const AGENT_URL = 'http://127.0.0.1:47800';
 
+/** Descarga del agente (binarios publicados por el workflow de releases). */
+export const AGENT_DOWNLOAD_URL = 'https://github.com/amenur/AIL_Helper/releases/latest';
+
 function normalize(s: string): string {
   return s
     .toLowerCase()
@@ -28,6 +31,11 @@ export function matchGpu(renderer: string, gpus: Gpu[]): Gpu | null {
     }
   }
   return best;
+}
+
+/** Renderizado por software: el navegador no expone la GPU real. */
+export function isSoftwareRenderer(renderer: string): boolean {
+  return /swiftshader|llvmpipe|softpipe|basic render|microsoft basic/i.test(renderer);
 }
 
 export interface BrowserDetection {
@@ -83,9 +91,18 @@ export async function detectInBrowser(): Promise<BrowserDetection> {
 export interface AgentHardwareReport {
   schemaVersion: 1;
   agentVersion: string;
+  os: { family: string; name: string; arch: string };
   cpu: { name: string; logicalCores: number };
-  memory: { totalGB: number; type?: string };
-  gpus: { vendor: string; name: string; vramGB: number }[];
+  memory: { totalGB: number; type?: string; speedMTs?: number | null };
+  gpus: {
+    vendor: string;
+    name: string;
+    vramGB: number;
+    integrated?: boolean;
+    driverVersion?: string | null;
+    cudaVersion?: string | null;
+  }[];
+  disk?: { freeGB: number } | null;
 }
 
 export async function fetchAgentReport(timeoutMs = 800): Promise<AgentHardwareReport | null> {
@@ -101,12 +118,13 @@ export async function fetchAgentReport(timeoutMs = 800): Promise<AgentHardwareRe
   }
 }
 
-const RAM_TYPES: RamType[] = ['ddr4', 'ddr5', 'lpddr5x'];
+const RAM_TYPES: Record<string, RamType> = { ddr4: 'ddr4', ddr5: 'ddr5', lpddr5: 'lpddr5x', lpddr5x: 'lpddr5x' };
 
 export function profileFromAgent(report: AgentHardwareReport, gpus: Gpu[]): HardwareProfile {
-  const main = [...report.gpus].sort((a, b) => b.vramGB - a.vramGB)[0];
+  // La GPU con más VRAM dedicada; las integradas no cuentan para llama.cpp.
+  const main = [...report.gpus].filter((g) => !g.integrated && g.vramGB > 0).sort((a, b) => b.vramGB - a.vramGB)[0];
   const match = main ? matchGpu(main.name, gpus) : null;
-  const ramType = RAM_TYPES.find((t) => t === report.memory.type) ?? 'unknown';
+  const ramType = RAM_TYPES[report.memory.type ?? ''] ?? 'unknown';
   return {
     source: 'agent',
     cpuThreads: report.cpu.logicalCores,
@@ -114,7 +132,16 @@ export function profileFromAgent(report: AgentHardwareReport, gpus: Gpu[]): Hard
     ramType,
     gpuId: match?.id ?? null,
     vramGBOverride: main && !match?.unifiedMemory ? main.vramGB : null,
-    detectedGpuName: main?.name ?? null,
+    detectedGpuName: main?.name ?? report.gpus[0]?.name ?? null,
+    agent: {
+      version: report.agentVersion,
+      os: report.os.name,
+      cpuName: report.cpu.name,
+      diskFreeGB: report.disk?.freeGB ?? null,
+      ramSpeedMTs: report.memory.speedMTs ?? null,
+      driverVersion: main?.driverVersion ?? null,
+      cudaVersion: main?.cudaVersion ?? null,
+    },
   };
 }
 
@@ -131,5 +158,6 @@ export function profileFromBrowser(det: BrowserDetection, gpus: Gpu[]): Hardware
     gpuId: match?.id ?? null,
     vramGBOverride: null,
     detectedGpuName: det.renderer ?? det.webgpu?.description ?? null,
+    agent: null,
   };
 }

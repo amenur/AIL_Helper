@@ -2,8 +2,10 @@
   import { onMount } from 'svelte';
   import { $hardware as hardware, setHardware } from '../lib/store.ts';
   import {
+    AGENT_DOWNLOAD_URL,
     detectInBrowser,
     fetchAgentReport,
+    isSoftwareRenderer,
     profileFromAgent,
     profileFromBrowser,
     type BrowserDetection,
@@ -23,7 +25,7 @@
     ['intel', 'Intel'],
     ['apple', 'Apple Silicon'],
   ];
-  const ramOptions = [8, 16, 24, 32, 48, 64, 96, 128, 192, 256];
+  const baseRamOptions = [8, 16, 24, 32, 48, 64, 96, 128, 192, 256];
   const ramTypes: [RamType, string][] = [
     ['unknown', 'No lo sé'],
     ['ddr4', 'DDR4'],
@@ -32,6 +34,10 @@
   ];
 
   const hw = $derived($hardware);
+  // Incluye el valor real (p. ej. 31 GB que informa el agente) aunque no sea estándar.
+  const ramOptions = $derived(
+    hw && !baseRamOptions.includes(hw.ramGB) ? [...baseRamOptions, hw.ramGB].sort((a, b) => a - b) : baseRamOptions,
+  );
   const gpu = $derived(hw?.gpuId ? (gpus.find((g) => g.id === hw.gpuId) ?? null) : null);
 
   async function detect() {
@@ -58,8 +64,11 @@
     update({ gpuId: id || null, vramGBOverride: null });
   }
 
-  onMount(() => {
-    if (!hw) detect();
+  onMount(async () => {
+    if (!hw) return detect();
+    // Aunque haya un perfil guardado, si el agente está en marcha manda él.
+    const report = await fetchAgentReport();
+    if (report) setHardware(profileFromAgent(report, gpus));
   });
 
   const sourceLabel = $derived(
@@ -114,13 +123,30 @@
       </div>
     </dl>
 
+    {#if hw.agent}
+      <p class="mt-4 text-xs text-slate-500">
+        {hw.agent.cpuName} · {hw.agent.os}
+        {#if hw.agent.ramSpeedMTs} · RAM a {hw.agent.ramSpeedMTs} MT/s{/if}
+        {#if hw.agent.cudaVersion} · CUDA {hw.agent.cudaVersion}{/if}
+        {#if hw.agent.driverVersion} · driver {hw.agent.driverVersion}{/if}
+        {#if hw.agent.diskFreeGB != null} · {Math.round(hw.agent.diskFreeGB)} GB libres en disco{/if}
+        · agente v{hw.agent.version}
+      </p>
+    {/if}
+
     {#if hw.source === 'browser'}
       <p class="mt-4 rounded-lg border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-amber-200/90">
         El navegador no puede leer la VRAM ni la RAM exacta (como mucho informa de 8 GB).
         {#if hw.detectedGpuName && !gpu}
-          Ha detectado <code class="text-amber-100">{hw.detectedGpuName}</code>, pero no está en el catálogo.
+          {#if isSoftwareRenderer(hw.detectedGpuName)}
+            Tu navegador tiene la aceleración gráfica desactivada, así que no puede identificar la GPU.
+          {:else}
+            Ha detectado <code class="text-amber-100">{hw.detectedGpuName}</code>, pero no está en el catálogo.
+          {/if}
         {/if}
-        Revisa los valores abajo, o instala el agente local para obtener datos exactos.
+        Revisa los valores abajo, o
+        <a class="underline hover:text-amber-100" href={AGENT_DOWNLOAD_URL} target="_blank" rel="noopener">instala el agente local</a>
+        para obtener datos exactos.
       </p>
     {/if}
 

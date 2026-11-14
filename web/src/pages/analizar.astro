@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HardwarePanel from '../components/HardwarePanel.svelte';
+import ModelTable from '../components/ModelTable.svelte';
+import { getGpus, getModels } from '../lib/catalog.ts';
+
+const models = await getModels();
+const gpus = await getGpus();
+---
+
+<Layout title="Analiza tu equipo · AIL Helper">
+  <section class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight text-slate-50 sm:text-4xl">¿Qué IA puedes ejecutar en tu equipo?</h1>
+    <p class="mt-3 max-w-2xl text-slate-400">
+      Analizamos tu hardware, estimamos a qué velocidad irá cada modelo con <a class="text-sky-300 hover:underline" href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>{' '}
+      y te damos todo lo necesario para
+      chatear con él en local mediante <a class="text-sky-300 hover:underline" href="https://openwebui.com">Open WebUI</a>.
+    </p>
+  </section>
+
+  <div class="flex flex-col gap-6">
+    <HardwarePanel client:only="svelte" {gpus} />
+    <div id="modelos">
+      <ModelTable client:only="svelte" {models} {gpus} />
+    </div>
+  </div>
+</Layout>
