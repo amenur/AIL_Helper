@@ -3,6 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import HeroDemo from '../components/landing/HeroDemo.svelte';
 import SpeedRace from '../components/landing/SpeedRace.svelte';
 import HeroYourMachine from '../components/landing/HeroYourMachine.svelte';
+import UseCases from '../components/landing/UseCases.astro';
+import FeaturedModels from '../components/landing/FeaturedModels.astro';
+import CloudComparison from '../components/landing/CloudComparison.astro';
+import Validation from '../components/landing/Validation.astro';
 import { getGpus, getModels } from '../lib/catalog.ts';
 import { url } from '../lib/url.ts';
 
@@ -141,6 +145,8 @@ const faqs = [
     </dl>
   </section>
 
+  <UseCases />
+
   <!-- ============ CÓMO FUNCIONA ============ -->
   <section id="como" class="section scroll-mt-16">
     <div class="reveal mx-auto max-w-2xl text-center">
@@ -188,6 +194,8 @@ const faqs = [
       </div>
     </div>
   </section>
+
+  <FeaturedModels {models} {gpus} />
 
   <!-- ============ BENTO ============ -->
   <section class="section">
@@ -278,6 +286,8 @@ const faqs = [
     </div>
   </section>
 
+  <CloudComparison />
+
   <!-- ============ ARQUITECTURA ============ -->
   <section class="border-y border-white/5 bg-white/[0.015]">
     <div class="section">
@@ -320,6 +330,8 @@ const faqs = [
       </div>
     </div>
   </section>
+
+  <Validation {gpus} />
 
   <!-- ============ FAQ ============ -->
   <section id="faq" class="section scroll-mt-16">

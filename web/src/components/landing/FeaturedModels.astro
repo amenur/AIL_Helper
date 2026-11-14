@@ -1,0 +1,74 @@
+---
+import { estimate, defaultContext } from '../../lib/estimate.ts';
+import { DEMO_MACHINES } from '../../lib/demo.ts';
+import { params, wps } from '../../lib/format.ts';
+import { url } from '../../lib/url.ts';
+import type { Gpu, Model } from '../../lib/types.ts';
+
+interface Props {
+  models: Model[];
+  gpus: Gpu[];
+}
+const { models, gpus } = Astro.props;
+
+const PICKS = [
+  { id: 'qwen3-4b', badge: 'Para portátiles', why: 'Rápido incluso sin tarjeta gráfica y sorprendentemente capaz.' },
+  { id: 'qwen3-8b', badge: 'El más equilibrado', why: 'La mejor relación calidad/requisitos para el día a día.' },
+  { id: 'qwen2.5-coder-7b', badge: 'Para programar', why: 'Especializado en código: revisar, explicar y completar.' },
+  { id: 'gpt-oss-20b', badge: 'Rápido sin GPU', why: 'Mixture-of-Experts: mucha calidad leyendo solo 3,6B parámetros por token.' },
+];
+
+// Equipos de referencia para dar una velocidad orientativa.
+const laptop = DEMO_MACHINES.find((m) => m.id === 'laptop')!;
+const gaming = DEMO_MACHINES.find((m) => m.id === 'rtx4060')!;
+const gamingGpu = gpus.find((g) => g.id === gaming.gpuId) ?? null;
+
+const cards = PICKS.map((p) => {
+  const model = models.find((m) => m.id === p.id);
+  if (!model) return null;
+  const ctx = defaultContext(model);
+  const q = model.defaultQuant;
+  const onLaptop = estimate(model, q, ctx, laptop.hw, null);
+  const onGaming = estimate(model, q, ctx, gaming.hw, gamingGpu);
+  return { ...p, model, quant: q, memGB: Math.ceil(onGaming.totalGB), onLaptop, onGaming };
+}).filter((c) => c !== null);
+---
+
+<section id="modelos" class="section scroll-mt-16">
+  <div class="reveal flex flex-wrap items-end justify-between gap-6">
+    <div class="max-w-2xl">
+      <p class="eyebrow">Modelos destacados</p>
+      <h2 class="h2">¿Por cuál empiezo?</h2>
+      <p class="lead">Cuatro buenos puntos de partida. Cada ficha te dice cuánta memoria necesita y a qué velocidad irá en tu equipo.</p>
+    </div>
+    <a href={url('/analizar#modelos')} class="btn-outline">Ver los {models.length} modelos →</a>
+  </div>
+  <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      cards.map((c) => (
+        <a href={url(`/modelos/${c.model.id}`)} class="reveal glass group flex flex-col p-6 transition-colors hover:border-sky-400/40">
+          <span class="w-fit rounded-full border border-sky-400/30 bg-sky-400/10 px-2.5 py-0.5 text-xs text-sky-200">{c.badge}</span>
+          <h3 class="mt-4 text-lg font-semibold text-slate-50 group-hover:text-sky-200">{c.model.name}</h3>
+          <p class="text-xs text-slate-400">
+            {c.model.org} · {params(c.model.paramsB)} parámetros · {c.model.license}
+          </p>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-slate-400">{c.why}</p>
+          <dl class="mt-5 space-y-1.5 border-t border-white/5 pt-4 text-xs">
+            <div class="flex justify-between">
+              <dt class="text-slate-400">Memoria ({c.quant})</dt>
+              <dd class="font-mono text-slate-200">≈ {c.memGB} GB</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-slate-400">{laptop.label}</dt>
+              <dd class="font-mono text-slate-200">{wps(c.onLaptop.genTokS)} palabras/s</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-slate-400">Con RTX 4060</dt>
+              <dd class="font-mono text-slate-200">{wps(c.onGaming.genTokS)} palabras/s</dd>
+            </div>
+          </dl>
+        </a>
+      ))
+    }
+  </div>
+</section>

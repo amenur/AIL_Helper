@@ -1,0 +1,87 @@
+---
+import { estimate } from '../../lib/estimate.ts';
+import { tps } from '../../lib/format.ts';
+import { url } from '../../lib/url.ts';
+import type { Gpu, Model } from '../../lib/types.ts';
+import benchData from '../../../../shared/catalog/benchmarks.json';
+
+interface Props {
+  gpus: Gpu[];
+}
+const { gpus } = Astro.props;
+
+interface Bench {
+  model: Model;
+  context: number;
+  entries: { gpuId: string; ramGB: number; quant: string; measuredTokS: number; source: string }[];
+  sources: Record<string, { label: string; url: string }>;
+}
+// Datos de validación (no forman parte del catálogo de modelos).
+const bench = benchData as Bench;
+
+const rows = bench.entries.map((e) => {
+  const gpu = gpus.find((g) => g.id === e.gpuId) ?? null;
+  const est = estimate(bench.model, e.quant, bench.context, { source: 'manual', cpuThreads: 16, ramGB: e.ramGB, ramType: 'ddr5', gpuId: e.gpuId }, gpu);
+  return { ...e, gpuName: gpu?.name ?? e.gpuId, estimated: est.genTokS, diff: est.genTokS / e.measuredTokS - 1 };
+});
+const meanAbs = rows.reduce((s, r) => s + Math.abs(r.diff), 0) / rows.length;
+const pct = (d: number) => `${d > 0 ? '+' : ''}${Math.round(d * 100)} %`;
+---
+
+<section class="section">
+  <div class="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
+    <div class="reveal">
+      <p class="eyebrow">¿Me puedo fiar?</p>
+      <h2 class="h2">Estimado frente a medido</h2>
+      <p class="lead">
+        Contrastamos el motor con mediciones públicas de llama.cpp ({bench.model.name}, generación de 128 tokens). El error medio es del
+        <strong class="text-slate-100">{Math.round(meanAbs * 100)} %</strong>.
+      </p>
+      <p class="mt-4 text-sm text-slate-400">
+        Estas comprobaciones forman parte de los tests del proyecto: si un cambio empeora la precisión, falla. Las GPUs de AMD e Intel aún no
+        tienen mediciones de referencia. Más detalles en la <a class="text-sky-300 hover:underline" href={url('/como-funciona')}>metodología</a>.
+      </p>
+    </div>
+    <div class="reveal">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[460px] text-left text-sm">
+          <thead class="text-xs uppercase tracking-wider text-slate-400">
+            <tr>
+              <th class="py-2 pr-3 font-medium">Equipo</th>
+              <th class="py-2 pr-3 font-medium">Cuant.</th>
+              <th class="py-2 pr-3 text-right font-medium">Medido</th>
+              <th class="py-2 pr-3 text-right font-medium">Estimado</th>
+              <th class="py-2 text-right font-medium">Diferencia</th>
+            </tr>
+          </thead>
+          <tbody class="font-mono">
+            {
+              rows.map((r) => (
+                <tr class="border-t border-white/5">
+                  <td class="py-3 pr-3 font-sans text-slate-200">{r.gpuName}</td>
+                  <td class="py-3 pr-3 text-slate-400">{r.quant}</td>
+                  <td class="py-3 pr-3 text-right text-slate-200">{tps(r.measuredTokS)}</td>
+                  <td class="py-3 pr-3 text-right text-slate-200">{tps(r.estimated)}</td>
+                  <td class:list={['py-3 text-right', Math.abs(r.diff) <= 0.1 ? 'text-lime-300' : 'text-amber-300']}>{pct(r.diff)}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs text-slate-400">
+        Tokens por segundo. Fuentes:
+        {
+          Object.values(bench.sources).map((s, i) => (
+            <>
+              {i > 0 && ' · '}
+              <a class="text-sky-300 hover:underline" href={s.url}>
+                {s.label}
+              </a>
+            </>
+          ))
+        }
+      </p>
+    </div>
+  </div>
+</section>

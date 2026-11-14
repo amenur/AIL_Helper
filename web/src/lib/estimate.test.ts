@@ -119,3 +119,12 @@ test('isSoftwareRenderer detecta renderizado sin GPU', () => {
   assert.ok(isSoftwareRenderer('llvmpipe (LLVM 17.0.6, 256 bits)'));
   assert.ok(!isSoftwareRenderer('ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 (0x00002786) Direct3D11)'));
 });
+
+test('validación: la estimación queda a ±15 % de mediciones públicas de llama.cpp', () => {
+  const bench = JSON.parse(readFileSync(new URL('../../../shared/catalog/benchmarks.json', import.meta.url), 'utf8'));
+  for (const e of bench.entries) {
+    const est = estimate(bench.model, e.quant, bench.context, hw({ ramGB: e.ramGB, gpuId: e.gpuId }), gpu(e.gpuId));
+    const err = est.genTokS / e.measuredTokS - 1;
+    assert.ok(Math.abs(err) <= 0.15, `${e.gpuId} ${e.quant}: ${(err * 100).toFixed(0)} %`);
+  }
+});

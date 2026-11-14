@@ -30,7 +30,15 @@ import Layout from '../layouts/Layout.astro';
         En los modelos <em>Mixture-of-Experts</em> solo se leen los expertos activos, por eso van mucho más rápido que un modelo denso del mismo tamaño.
         La lectura del prompt, en cambio, depende de la potencia de cálculo (FLOPS).
       </p>
-      <p class="text-sm text-slate-500">Son estimaciones orientativas (±30 %): drivers, versión de llama.cpp y configuración influyen.</p>
+      <p>
+        El aprovechamiento real del ancho de banda depende del backend: con CUDA, llama.cpp llega a un ~85 % del teórico; con Metal
+        (Apple), a un ~75 %. Estos valores están calibrados con mediciones públicas de llama.cpp y el proyecto comprueba en sus tests que
+        la estimación se mantiene a menos de un 15 % de ellas. Las GPUs de AMD e Intel aún no tienen mediciones de referencia y usan valores
+        conservadores.
+      </p>
+      <p class="text-sm text-slate-400">
+        Aun así, son estimaciones orientativas: la versión de llama.cpp, los drivers y la configuración influyen.
+      </p>
     </section>
 
     <section class="space-y-3">
