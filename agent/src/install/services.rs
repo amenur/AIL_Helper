@@ -111,6 +111,9 @@ pub async fn start_webui(paths: &Paths) -> Result<Child> {
         .env("ENABLE_OLLAMA_API", "False")
         // Un solo usuario local: sin pantalla de registro ni contraseña.
         .env("WEBUI_AUTH", "False")
+        // Open WebUI guarda su clave secreta (.webui_secret_key) en el directorio actual:
+        // que sea su carpeta de datos y no la carpeta desde la que se abrió el agente.
+        .current_dir(paths.webui_data())
         .stdout(log.try_clone()?)
         .stderr(log)
         .kill_on_drop(true);
