@@ -6,7 +6,7 @@ con **llama.cpp** y ayuda a instalarlo junto con **Open WebUI** como interfaz de
 ## Estructura
 
 ```
-web/      Web en Astro + Svelte 5 + Tailwind 4 (catálogo, detección, simulador, instalación)
+web/      Web en Astro + Svelte 5 + Tailwind 4: landing (/), analizador (/analizar), fichas de modelo (/modelos/…)
 agent/    Agente local en Rust: detección exacta del hardware (API en 127.0.0.1:47800)
 shared/
   catalog/  models.json y gpus.json: datos compartidos por la web y el agente
