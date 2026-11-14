@@ -9,6 +9,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: process.env.SITE,
   base: process.env.BASE_PATH ?? '/',
+  // La compresión de HTML se come el espacio entre un salto de línea y un elemento
+  // ("del<strong>5 %</strong>" → "del5 %"). El ahorro es mínimo; se desactiva.
+  compressHTML: false,
   // El sitemap necesita la URL absoluta del sitio, que solo existe en el despliegue.
   integrations: [svelte(), ...(process.env.SITE ? [sitemap()] : [])],
   vite: { plugins: [tailwindcss()] },

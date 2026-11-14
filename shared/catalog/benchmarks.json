@@ -1,0 +1,40 @@
+{
+  "description": "Mediciones públicas de llama.cpp (llama-bench, tg128: generación de 128 tokens) para validar el motor de estimación.",
+  "model": {
+    "id": "llama-2-7b",
+    "name": "Llama 2 7B",
+    "family": "Llama 2",
+    "org": "Meta",
+    "paramsB": 6.74,
+    "layers": 32,
+    "kvHeads": 32,
+    "headDim": 128,
+    "maxContext": 4096,
+    "hfRepo": "TheBloke/Llama-2-7B-GGUF",
+    "quants": ["Q4_0", "Q8_0"],
+    "defaultQuant": "Q4_0",
+    "tags": [],
+    "description": "Modelo de referencia de los benchmarks de llama.cpp.",
+    "license": "Llama 2 Community"
+  },
+  "context": 128,
+  "entries": [
+    { "gpuId": "rtx-4090", "ramGB": 64, "quant": "Q4_0", "measuredTokS": 187.7, "source": "cuda" },
+    { "gpuId": "rtx-3090", "ramGB": 64, "quant": "Q4_0", "measuredTokS": 167.3, "source": "cuda" },
+    { "gpuId": "apple-m3-max", "ramGB": 64, "quant": "Q4_0", "measuredTokS": 66.3, "source": "apple" },
+    { "gpuId": "apple-m2-max", "ramGB": 64, "quant": "Q4_0", "measuredTokS": 66.0, "source": "apple" },
+    { "gpuId": "apple-m1-max", "ramGB": 64, "quant": "Q4_0", "measuredTokS": 61.2, "source": "apple" },
+    { "gpuId": "apple-m1-max", "ramGB": 64, "quant": "Q8_0", "measuredTokS": 40.2, "source": "apple" },
+    { "gpuId": "apple-m1", "ramGB": 16, "quant": "Q4_0", "measuredTokS": 14.2, "source": "apple" }
+  ],
+  "sources": {
+    "cuda": {
+      "label": "Comparativa CUDA de llama.cpp en r/LocalLLaMA (nov. 2024)",
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1ghvwsj/"
+    },
+    "apple": {
+      "label": "llama.cpp, discusión #4167: rendimiento en Apple Silicon",
+      "url": "https://github.com/ggml-org/llama.cpp/discussions/4167"
+    }
+  }
+}

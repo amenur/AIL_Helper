@@ -1,0 +1,48 @@
+---
+// win: 'local' | 'cloud' | 'tie' marca qué columna sale ganando en cada fila.
+const rows = [
+  { aspect: 'Privacidad', local: 'Tus datos no salen de tu equipo', cloud: 'Se envían a servidores de terceros', win: 'local' },
+  { aspect: 'Coste', local: 'Gratis, con el equipo que ya tienes', cloud: 'Suscripción mensual o pago por uso', win: 'local' },
+  { aspect: 'Sin conexión', local: 'Funciona sin internet', cloud: 'Necesita conexión siempre', win: 'local' },
+  { aspect: 'Límites de uso', local: 'Ninguno', cloud: 'Cuotas de mensajes o de tokens', win: 'local' },
+  { aspect: 'Calidad máxima', local: 'Muy buena en tareas habituales', cloud: 'Los modelos más grandes y capaces', win: 'cloud' },
+  { aspect: 'Velocidad', local: 'Depende de tu equipo', cloud: 'Alta y constante', win: 'cloud' },
+  { aspect: 'Puesta en marcha', local: 'Instalar y descargar el modelo (unos minutos)', cloud: 'Inmediata', win: 'cloud' },
+] as const;
+---
+
+<section class="section">
+  <div class="reveal mx-auto max-w-2xl text-center">
+    <p class="eyebrow">Local frente a la nube</p>
+    <h2 class="h2">Una comparación honesta</h2>
+    <p class="lead">La IA local no sustituye a la nube en todo. Gana donde más importa a muchos: privacidad, coste y control.</p>
+  </div>
+  <div class="reveal mt-12 overflow-x-auto">
+    <table class="w-full min-w-[560px] text-left text-sm">
+      <thead>
+        <tr class="text-xs uppercase tracking-wider text-slate-400">
+          <th class="w-1/4 py-3 pr-4 font-medium"></th>
+          <th class="w-[37.5%] rounded-t-xl bg-sky-400/[0.07] px-4 py-3 font-semibold text-sky-200">IA local</th>
+          <th class="w-[37.5%] px-4 py-3 font-medium">IA en la nube</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((r, i) => (
+            <tr class="border-t border-white/5">
+              <th scope="row" class="py-4 pr-4 font-medium text-slate-200">{r.aspect}</th>
+              <td class:list={['bg-sky-400/[0.07] px-4 py-4', i === rows.length - 1 && 'rounded-b-xl']}>
+                <span class:list={['mr-2', r.win === 'local' ? 'text-lime-400' : 'text-slate-500']}>{r.win === 'local' ? '✓' : '–'}</span>
+                <span class={r.win === 'local' ? 'text-slate-100' : 'text-slate-400'}>{r.local}</span>
+              </td>
+              <td class="px-4 py-4">
+                <span class:list={['mr-2', r.win === 'cloud' ? 'text-lime-400' : 'text-slate-500']}>{r.win === 'cloud' ? '✓' : '–'}</span>
+                <span class={r.win === 'cloud' ? 'text-slate-100' : 'text-slate-400'}>{r.cloud}</span>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

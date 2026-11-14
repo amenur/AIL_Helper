@@ -90,7 +90,7 @@
     </button>
   </div>
 
-  <div class="mt-8 grid gap-4 md:grid-cols-3">
+  <div class="mt-8 grid gap-3 md:grid-cols-3 md:gap-4">
     {#each lanes as { machine, est } (machine.id)}
       {@const shown = shownFor(est.genTokS, est.prefillTokS)}
       {@const pct = (shown / tokens.length) * 100}
@@ -117,7 +117,7 @@
             <div class="h-1 rounded-full bg-gradient-to-r from-sky-400 to-lime-300" style:width="{pct}%"></div>
           </div>
         </header>
-        <div class="relative h-44 overflow-hidden p-4 text-sm leading-relaxed text-slate-300">
+        <div class="relative hidden h-44 overflow-hidden p-4 text-sm leading-relaxed text-slate-300 md:block">
           {#if est.placement === 'nofit'}
             <p class="text-rose-300">No cabe en la memoria de este equipo.</p>
           {:else if elapsed > 0 && shown === 0}

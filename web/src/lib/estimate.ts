@@ -22,6 +22,7 @@ export interface QuantInfo {
 export const QUANTS: Record<string, QuantInfo> = {
   Q2_K: { bpw: 2.96, quality: 'Baja: pérdida notable' },
   Q3_K_M: { bpw: 3.91, quality: 'Aceptable: algo de pérdida' },
+  Q4_0: { bpw: 4.54, quality: 'Buena (formato clásico)' },
   Q4_K_M: { bpw: 4.85, quality: 'Buena: el equilibrio recomendado' },
   Q5_K_M: { bpw: 5.69, quality: 'Muy buena' },
   Q6_K: { bpw: 6.56, quality: 'Casi sin pérdida' },
@@ -38,11 +39,21 @@ export const RAM_BANDWIDTH: Record<RamType, number> = {
   unknown: 51,
 };
 
-const GPU_BW_EFF = 0.75;
+/**
+ * Fracción del ancho de banda teórico que aprovecha llama.cpp, y coste fijo por token.
+ * Calibrado con mediciones públicas (shared/catalog/benchmarks.json):
+ * CUDA aprovecha mejor la memoria y lanza los kernels más rápido que Metal.
+ * AMD e Intel no están validados aún: usan los valores conservadores.
+ */
+const GPU_EFF: Record<Gpu['vendor'], { bw: number; tokenOverheadS: number }> = {
+  nvidia: { bw: 0.85, tokenOverheadS: 0.001 },
+  apple: { bw: 0.75, tokenOverheadS: 0.002 },
+  amd: { bw: 0.75, tokenOverheadS: 0.002 },
+  intel: { bw: 0.75, tokenOverheadS: 0.002 },
+};
 const CPU_BW_EFF = 0.65;
 /** Cada hilo de CPU satura aprox. esta cantidad de GB/s de memoria. */
 const CPU_BW_PER_THREAD = 8;
-const GPU_TOKEN_OVERHEAD_S = 0.002;
 const GPU_FLOPS_EFF = 0.5;
 const CPU_TFLOPS_PER_THREAD = 0.05;
 /** VRAM que se queda el sistema/escritorio/driver. */
@@ -142,10 +153,11 @@ export function estimate(
 
   const cpuBw =
     Math.min(RAM_BANDWIDTH[hw.ramType], hw.cpuThreads * CPU_BW_PER_THREAD) * CPU_BW_EFF;
-  const gpuBw = gpu ? gpu.bandwidthGBs * GPU_BW_EFF : 0;
+  const eff = gpu ? GPU_EFF[gpu.vendor] : null;
+  const gpuBw = gpu && eff ? gpu.bandwidthGBs * eff.bw : 0;
 
   let tGen = 0;
-  if (gpuFraction > 0) tGen += (gpuFraction * bytesPerToken) / gpuBw + GPU_TOKEN_OVERHEAD_S;
+  if (gpuFraction > 0 && eff) tGen += (gpuFraction * bytesPerToken) / gpuBw + eff.tokenOverheadS;
   if (gpuFraction < 1) tGen += ((1 - gpuFraction) * bytesPerToken) / cpuBw;
   const genTokS = placement === 'nofit' ? 0 : 1 / tGen;
 
