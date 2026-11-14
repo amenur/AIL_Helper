@@ -6,6 +6,11 @@ mod ram;
 use crate::report::*;
 use sysinfo::{CpuRefreshKind, Disks, MemoryRefreshKind, RefreshKind, System};
 
+/// Solo las GPUs (para elegir el build de llama.cpp).
+pub fn gpus() -> Vec<GpuInfo> {
+    gpu::detect()
+}
+
 pub fn hardware_report() -> HardwareReport {
     let sys = System::new_with_specifics(
         RefreshKind::nothing()

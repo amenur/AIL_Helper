@@ -5,15 +5,27 @@ edition = "2024"
 license = "MIT"
 
 [dependencies]
+anyhow = "1.0.104"
 axum = "0.8.9"
+flate2 = "1.1.11"
+futures-util = "0.3.34"
+getrandom = "0.4.3"
+hex = "0.4.3"
 nvml-wrapper = "0.13.0"
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls", "stream", "json"] }
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
+sha2 = "0.11.1"
 sysinfo = "0.40.3"
-tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "net", "signal"] }
+tar = "0.4.46"
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "net", "signal", "fs", "process", "io-util", "sync", "time"] }
 tower-http = { version = "0.7.1", features = ["cors"] }
 tracing = "0.1.44"
 tracing-subscriber = "0.3.23"
+zip = { version = "9.5.1", default-features = false, features = ["deflate"] }
 
 [target."cfg(windows)".dependencies]
 windows = { version = "0.62.2", features = ["Win32_Graphics_Dxgi", "Win32_Foundation"] }
+
+[dev-dependencies]
+tempfile = "3.27.0"
