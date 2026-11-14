@@ -1,8 +1,10 @@
 @import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
   --color-accent: #38bdf8;
   --color-ok: #a3e635;
 }
@@ -10,6 +12,11 @@
 @layer base {
   html { color-scheme: dark; }
   body { @apply bg-slate-950 text-slate-200 font-sans antialiased; }
+  :where(a, button, summary, select, input):focus-visible {
+    outline: 2px solid var(--color-sky-400);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
 }
 
 @layer components {
@@ -83,13 +90,8 @@
   to { opacity: 1; transform: none; }
 }
 
-@keyframes float {
-  50% { transform: translateY(-8px); }
-}
-.animate-float { animation: float 6s ease-in-out infinite; }
-
 @media (prefers-reduced-motion: reduce) {
-  .reveal, .animate-float, .glow-border::before { animation: none !important; }
+  .reveal, .glow-border::before { animation: none !important; }
 }
 
 /* Evita que el contenido ancho (código, pestañas) ensanche las columnas de grid en móvil. */

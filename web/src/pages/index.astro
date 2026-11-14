@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import HeroDemo from '../components/landing/HeroDemo.svelte';
 import SpeedRace from '../components/landing/SpeedRace.svelte';
+import HeroYourMachine from '../components/landing/HeroYourMachine.svelte';
 import { getGpus, getModels } from '../lib/catalog.ts';
 import { url } from '../lib/url.ts';
 
@@ -14,7 +15,7 @@ const stats = [
   { value: String(models.length), label: 'modelos abiertos en el catálogo' },
   { value: String(gpus.length), label: 'GPUs NVIDIA, AMD, Intel y Apple' },
   { value: '0', label: 'datos que salen de tu equipo' },
-  { value: '±30 %', label: 'precisión de la estimación' },
+  { value: '0 €', label: 'sin suscripciones ni límites de uso' },
 ];
 
 const steps = [
@@ -33,7 +34,7 @@ const steps = [
   {
     n: '03',
     title: 'Instala y chatea',
-    text: 'Obtén el build de llama.cpp adecuado a tu GPU, el modelo GGUF de Hugging Face y Open WebUI, listos para usar en tu navegador.',
+    text: 'Te indicamos el build de llama.cpp para tu GPU, el modelo de Hugging Face y cómo arrancar Open WebUI, con los comandos listos para copiar. Pronto, con un clic desde el agente.',
     icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
   },
 ];
@@ -101,10 +102,11 @@ const faqs = [
           </a>
           <a href="#carrera" class="btn-outline">Ver la demo</a>
         </div>
-        <p class="mt-6 text-xs text-slate-500">Funciona en Windows y Linux · No requiere registro</p>
+        <HeroYourMachine client:load {models} {gpus} />
+        <p class="mt-4 text-xs text-slate-400">Funciona en Windows y Linux · No requiere registro</p>
       </div>
 
-      <div class="animate-float">
+      <div>
         <HeroDemo client:load {models} {gpus} />
       </div>
     </div>
@@ -243,10 +245,15 @@ const faqs = [
       </article>
 
       <article class="reveal glass p-7 md:col-span-4">
-        <h3 class="text-lg font-semibold text-slate-100">Instalación sin misterios</h3>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg font-semibold text-slate-100">Instalación sin misterios</h3>
+          <span class="rounded-full border border-amber-300/30 bg-amber-300/10 px-2.5 py-0.5 text-xs text-amber-200">
+            Hoy: comandos para copiar · Pronto: un clic
+          </span>
+        </div>
         <p class="mt-2 text-slate-400">
           El build correcto de llama.cpp para tu GPU (CUDA, HIP, Vulkan o CPU), el modelo descargado directamente de Hugging Face y Open WebUI
-          instalado con uv, sin necesidad de tener Python.
+          instalado con uv, sin necesidad de tener Python. Generamos los comandos exactos para tu equipo y el modelo que elijas.
         </p>
         <pre class="code mt-5"><span class="text-slate-500">$</span> llama-server -hf Qwen/Qwen3-8B-GGUF:Q4_K_M -c 8192 -ngl 999
 <span class="text-slate-500">$</span> uvx --python 3.11 open-webui@latest serve --port 3000
