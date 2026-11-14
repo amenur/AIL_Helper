@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { estimate, RATING_LABEL, PLACEMENT_LABEL } from '../../lib/estimate.ts';
   import { DEMO_ANSWER, DEMO_MACHINES, tokenize } from '../../lib/demo.ts';
-  import { tps, RATING_CLASS } from '../../lib/format.ts';
+  import { tps, wps, readingMultiple, RATING_CLASS } from '../../lib/format.ts';
   import type { Gpu, Model } from '../../lib/types.ts';
 
   let { models, gpus }: { models: Model[]; gpus: Gpu[] } = $props();
@@ -99,14 +99,20 @@
           <div class="flex items-start justify-between gap-2">
             <div>
               <h3 class="font-semibold text-slate-100">{machine.label}</h3>
-              <p class="text-xs text-slate-500">{machine.detail}</p>
+              <p class="text-xs text-slate-400">{machine.detail}</p>
             </div>
             <span class="rounded-full border px-2 py-0.5 text-xs {RATING_CLASS[est.rating]}">{RATING_LABEL[est.rating]}</span>
           </div>
           <div class="mt-3 flex items-baseline gap-2">
-            <span class="font-mono text-3xl font-medium text-slate-50">{tps(est.genTokS)}</span>
-            <span class="text-sm text-slate-500">tokens/s · {PLACEMENT_LABEL[est.placement]}</span>
+            <span class="font-mono text-3xl font-medium text-slate-50">{wps(est.genTokS)}</span>
+            <span class="text-sm text-slate-400">palabras/s</span>
           </div>
+          <p class="mt-1 text-xs text-slate-400">
+            {tps(est.genTokS)} tokens/s · {PLACEMENT_LABEL[est.placement]}
+            {#if est.genTokS > 0}· {readingMultiple(est.genTokS) >= 1
+                ? `${readingMultiple(est.genTokS).toFixed(readingMultiple(est.genTokS) < 3 ? 1 : 0).replace('.', ',')}× tu velocidad de lectura`
+                : 'más lento de lo que lees'}{/if}
+          </p>
           <div class="mt-3 h-1 rounded-full bg-white/5">
             <div class="h-1 rounded-full bg-gradient-to-r from-sky-400 to-lime-300" style:width="{pct}%"></div>
           </div>
@@ -124,7 +130,7 @@
           {/if}
           <div class="pointer-events-none absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-slate-950 to-transparent"></div>
         </div>
-        <footer class="mt-auto border-t border-white/5 px-4 py-2 text-xs text-slate-500">
+        <footer class="mt-auto border-t border-white/5 px-4 py-2 text-xs text-slate-400">
           {#if shown >= tokens.length}
             ✓ Respuesta completa en {(PROMPT_TOKENS / est.prefillTokS + tokens.length / est.genTokS).toFixed(1)} s
           {:else if est.genTokS > 0}
@@ -136,7 +142,7 @@
       </article>
     {/each}
   </div>
-  <p class="mt-4 text-center text-xs text-slate-500">
+  <p class="mt-4 text-center text-xs text-slate-400">
     Misma pregunta, mismo modelo ({model?.name}, Q4_K_M), tres equipos. Velocidades calculadas con el mismo motor que usa el analizador.
   </p>
 </div>
