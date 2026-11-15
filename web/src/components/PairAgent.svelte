@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { health, isPaired, isValidToken, setToken } from '../lib/agent.ts';
+  import { health, isPaired, isValidToken, setToken, wizardActive } from '../lib/agent.ts';
   import { url } from '../lib/url.ts';
 
   type State = 'checking' | 'paired' | 'invalid' | 'no-agent' | 'mismatch';
@@ -20,31 +20,31 @@
       return;
     }
     state = (await isPaired()) ? 'paired' : 'mismatch';
+    // Si venía del asistente paso a paso, se continúa allí.
+    if (state === 'paired' && wizardActive()) location.replace(url('/empezar'));
   });
 </script>
 
 <div class="card mx-auto max-w-xl text-center" aria-live="polite">
   {#if state === 'checking'}
-    <p class="text-slate-300">Vinculando con el agente local…</p>
+    <p class="text-slate-300">Conectando con la app…</p>
   {:else if state === 'paired'}
     <p class="text-4xl">✓</p>
-    <h1 class="mt-3 text-2xl font-bold text-slate-50">Agente vinculado</h1>
-    <p class="mt-2 text-slate-400">
-      Esta web ya puede pedir al agente que instale modelos y arranque el chat. Solo funciona en este navegador.
-    </p>
-    <a class="btn btn-lg mt-6" href={url('/analizar#modelos')}>Elegir un modelo →</a>
+    <h1 class="mt-3 text-2xl font-bold text-slate-50">Conectado</h1>
+    <p class="mt-2 text-slate-400">La app y esta página ya están conectadas en este navegador.</p>
+    <a class="btn btn-lg mt-6" href={url('/empezar')}>Continuar →</a>
   {:else if state === 'no-agent'}
-    <h1 class="text-2xl font-bold text-slate-50">El agente no responde</h1>
+    <h1 class="text-2xl font-bold text-slate-50">La app no responde</h1>
     <p class="mt-2 text-slate-400">
-      Hemos guardado el código, pero no encontramos el agente en marcha. Ábrelo de nuevo y vuelve a esta página.
+      No encontramos la app abierta. Ábrela de nuevo y vuelve a esta página.
     </p>
   {:else if state === 'mismatch'}
     <h1 class="text-2xl font-bold text-slate-50">El código no coincide</h1>
     <p class="mt-2 text-slate-400">
-      Usa el enlace que muestra la ventana del agente que tienes abierto ahora mismo.
+      Cierra la app, ábrela otra vez y usa la pestaña que se abre.
     </p>
   {:else}
     <h1 class="text-2xl font-bold text-slate-50">Enlace no válido</h1>
-    <p class="mt-2 text-slate-400">Abre esta página desde el enlace que muestra el agente al arrancar.</p>
+    <p class="mt-2 text-slate-400">Esta página se abre sola al arrancar la app.</p>
   {/if}
 </div>

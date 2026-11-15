@@ -20,9 +20,8 @@ const ogImage = Astro.site ? new URL(url('/og.png'), Astro.site).href : null;
 const nav = [
   { href: '/#usos', label: 'Para qué sirve' },
   { href: '/#como', label: 'Cómo funciona' },
-  { href: '/#carrera', label: 'Demo' },
-  { href: '/#modelos', label: 'Modelos' },
-  { href: '/#faq', label: 'FAQ' },
+  { href: '/#privacidad', label: 'Privacidad' },
+  { href: '/#faq', label: 'Preguntas' },
 ];
 ---
 
@@ -73,9 +72,9 @@ const nav = [
             </svg>
           </a>
           {
-            path !== '/analizar' && (
-              <a href={url('/analizar')} class="btn py-1.5">
-                Analizar mi equipo
+            path !== '/empezar' && (
+              <a href={url('/empezar')} class="btn py-1.5">
+                Empezar gratis
               </a>
             )
           }
@@ -100,23 +99,22 @@ const nav = [
             <img src={url('/favicon.svg')} alt="" class="h-6 w-6" /> AIL Helper
           </div>
           <p class="mt-2 text-xs text-slate-400">
-            Estimaciones orientativas basadas en ancho de banda de memoria y cómputo; el rendimiento real puede variar ±30 %.
+            Asistentes de inteligencia artificial privados y gratuitos, en tu propio ordenador. Las velocidades mostradas son estimaciones.
           </p>
         </div>
         <div class="flex gap-10 text-xs">
           <ul class="space-y-2">
-            <li class="font-medium text-slate-300">Producto</li>
-            <li><a class="hover:text-slate-200" href={url('/analizar')}>Analizar mi equipo</a></li>
-            <li><a class="hover:text-slate-200" href={url('/analizar#modelos')}>Modelos</a></li>
-            <li><a class="hover:text-slate-200" href={url('/como-funciona')}>Metodología</a></li>
-            <li><a class="hover:text-slate-200" href="https://github.com/amenur/AIL_Helper">Código en GitHub</a></li>
-            <li><a class="hover:text-slate-200" href="https://github.com/amenur/AIL_Helper/blob/main/LICENSE">Licencia MIT</a></li>
+            <li class="font-medium text-slate-300">AIL Helper</li>
+            <li><a class="hover:text-slate-200" href={url('/empezar')}>Empezar gratis</a></li>
+            <li><a class="hover:text-slate-200" href={url('/#faq')}>Preguntas frecuentes</a></li>
+            <li><a class="hover:text-slate-200" href={url('/#privacidad')}>Privacidad</a></li>
           </ul>
           <ul class="space-y-2">
-            <li class="font-medium text-slate-300">Proyectos</li>
-            <li><a class="hover:text-slate-200" href="https://github.com/ggml-org/llama.cpp">llama.cpp</a></li>
-            <li><a class="hover:text-slate-200" href="https://openwebui.com">Open WebUI</a></li>
-            <li><a class="hover:text-slate-200" href="https://huggingface.co/models?library=gguf">Hugging Face</a></li>
+            <li class="font-medium text-slate-300">Para técnicos</li>
+            <li><a class="hover:text-slate-200" href={url('/como-funciona')}>Cómo funciona por dentro</a></li>
+            <li><a class="hover:text-slate-200" href={url('/analizar')}>Modo avanzado</a></li>
+            <li><a class="hover:text-slate-200" href="https://github.com/amenur/AIL_Helper">Código en GitHub</a></li>
+            <li><a class="hover:text-slate-200" href="https://github.com/amenur/AIL_Helper/blob/main/LICENSE">Licencia MIT</a></li>
           </ul>
         </div>
       </div>

@@ -1,22 +1,30 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { estimate, RATING_LABEL, PLACEMENT_LABEL } from '../../lib/estimate.ts';
+  import { estimate } from '../../lib/estimate.ts';
   import { DEMO_ANSWER, DEMO_MACHINES, DEMO_QUESTION, tokenize } from '../../lib/demo.ts';
-  import { tps, wps, readingMultiple, RATING_CLASS } from '../../lib/format.ts';
   import type { Gpu, Model } from '../../lib/types.ts';
 
   let { models, gpus }: { models: Model[]; gpus: Gpu[] } = $props();
 
-  const CHOICES = ['qwen3-8b', 'qwen3-14b', 'qwen3-30b-a3b'];
+  // Un modelo representativo de cada opción de /empezar.
+  const CHOICES = [
+    { id: 'qwen3-4b', label: 'Asistente rápido' },
+    { id: 'qwen3-8b', label: 'Asistente equilibrado' },
+    { id: 'qwen3-30b-a3b', label: 'Asistente más inteligente' },
+  ];
   // Plantilla de chat + pregunta: unos 60 tokens de prompt.
   const PROMPT_TOKENS = 60;
   // La carrera se corta aquí: el equipo lento no tiene por qué terminar.
   const MAX_RACE_S = 45;
   const tokens = tokenize(DEMO_ANSWER);
 
-  const choices = $derived(CHOICES.map((id) => models.find((m) => m.id === id)).filter((m): m is Model => !!m));
-  let modelId = $state(CHOICES[0]);
-  const model = $derived(choices.find((m) => m.id === modelId) ?? choices[0]);
+  const choices = $derived(
+    CHOICES.map((c) => ({ ...c, model: models.find((m) => m.id === c.id) })).filter(
+      (c): c is { id: string; label: string; model: Model } => !!c.model,
+    ),
+  );
+  let modelId = $state(CHOICES[1].id);
+  const model = $derived((choices.find((c) => c.id === modelId) ?? choices[0]).model);
 
   const lanes = $derived(
     DEMO_MACHINES.map((m) => {
@@ -54,6 +62,11 @@
     raf = requestAnimationFrame(tick);
   }
 
+  const total = (est: { prefillTokS: number; genTokS: number }) => PROMPT_TOKENS / est.prefillTokS + tokens.length / est.genTokS;
+  /** Cómo se siente, comparado con lo rápido que lee una persona (~6 tokens/s). */
+  const feel = (tokS: number) =>
+    tokS >= 30 ? 'Más rápido de lo que puedes leer' : tokS >= 10 ? 'Fluido, como hablar con alguien' : tokS >= 5 ? 'Algo lento, pero usable' : 'Lento';
+
   function pick(id: string) {
     modelId = id;
     run();
@@ -79,12 +92,12 @@
 
 <div bind:this={root}>
   <div class="flex flex-wrap items-center justify-center gap-2">
-    {#each choices as m}
+    {#each choices as c}
       <button
-        class="rounded-full border px-4 py-1.5 text-sm transition-colors {m.id === modelId
+        class="rounded-full border px-4 py-1.5 text-sm transition-colors {c.id === modelId
           ? 'border-sky-400 bg-sky-400/10 text-sky-100'
           : 'border-white/10 text-slate-400 hover:border-white/25 hover:text-slate-200'}"
-        onclick={() => pick(m.id)}>{m.name}</button
+        onclick={() => pick(c.id)}>{c.label}</button
       >
     {/each}
     <button class="ml-1 rounded-full border border-white/10 px-4 py-1.5 text-sm text-slate-400 hover:text-slate-200" onclick={run}>
@@ -107,18 +120,16 @@
               <h3 class="font-semibold text-slate-100">{machine.label}</h3>
               <p class="text-xs text-slate-400">{machine.detail}</p>
             </div>
-            <span class="rounded-full border px-2 py-0.5 text-xs {RATING_CLASS[est.rating]}">{RATING_LABEL[est.rating]}</span>
           </div>
-          <div class="mt-3 flex items-baseline gap-2">
-            <span class="font-mono text-3xl font-medium text-slate-50">{wps(est.genTokS)}</span>
-            <span class="text-sm text-slate-400">palabras/s</span>
-          </div>
-          <p class="mt-1 text-xs text-slate-400">
-            {tps(est.genTokS)} tokens/s · {PLACEMENT_LABEL[est.placement]}
-            {#if est.genTokS > 0}· {readingMultiple(est.genTokS) >= 1
-                ? `${readingMultiple(est.genTokS).toFixed(readingMultiple(est.genTokS) < 3 ? 1 : 0).replace('.', ',')}× tu velocidad de lectura`
-                : 'más lento de lo que lees'}{/if}
-          </p>
+          {#if est.placement === 'nofit'}
+            <p class="mt-3 text-sm text-rose-300">No tiene memoria suficiente para este asistente.</p>
+          {:else}
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-3xl font-semibold text-slate-50">{Math.max(1, Math.round(total(est)))} s</span>
+              <span class="text-sm text-slate-400">en escribir la respuesta</span>
+            </div>
+            <p class="mt-1 text-xs text-slate-400">{feel(est.genTokS)}</p>
+          {/if}
           <div class="mt-3 h-1 rounded-full bg-white/5">
             <div class="h-1 rounded-full bg-gradient-to-r from-sky-400 to-lime-300" style:width="{pct}%"></div>
           </div>
@@ -127,7 +138,7 @@
           {#if est.placement === 'nofit'}
             <p class="text-rose-300">No cabe en la memoria de este equipo.</p>
           {:else if elapsed > 0 && shown === 0}
-            <p class="animate-pulse text-slate-500">Leyendo el prompt…</p>
+            <p class="animate-pulse text-slate-500">Pensando…</p>
           {:else}
             <!-- Se ancla abajo para que se vea siempre el final, como en un chat. -->
             <p class="absolute inset-x-4 bottom-4 whitespace-pre-line">
@@ -137,18 +148,18 @@
           <div class="pointer-events-none absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-slate-950 to-transparent"></div>
         </div>
         <footer class="mt-auto border-t border-white/5 px-4 py-2 text-xs text-slate-400">
-          {#if shown >= tokens.length}
-            ✓ Respuesta completa en {(PROMPT_TOKENS / est.prefillTokS + tokens.length / est.genTokS).toFixed(1)} s
-          {:else if est.genTokS > 0}
-            Tardaría ≈ {(PROMPT_TOKENS / est.prefillTokS + tokens.length / est.genTokS).toFixed(0)} s en total
-          {:else}
+          {#if est.placement === 'nofit'}
             —
+          {:else if shown >= tokens.length}
+            ✓ Respuesta completa
+          {:else}
+            Escribiendo…
           {/if}
         </footer>
       </article>
     {/each}
   </div>
   <p class="mt-4 text-center text-xs text-slate-400">
-    Misma pregunta, mismo modelo ({model?.name}, Q4_K_M), tres equipos. Velocidades calculadas con el mismo motor que usa el analizador.
+    Misma pregunta y mismo asistente en tres ordenadores. Velocidades estimadas a partir de mediciones reales.
   </p>
 </div>

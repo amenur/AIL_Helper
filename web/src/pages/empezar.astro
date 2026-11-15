@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StartWizard from '../components/StartWizard.svelte';
+import { getGpus, getModels } from '../lib/catalog.ts';
+
+const models = await getModels();
+const gpus = await getGpus();
+---
+
+<Layout
+  title="Empieza · Tu asistente de IA privado"
+  description="Instala tu propio asistente de inteligencia artificial en tu ordenador en unos minutos, sin conocimientos técnicos."
+>
+  <div class="mx-auto max-w-3xl">
+    <h1 class="text-3xl font-bold tracking-tight text-slate-50 sm:text-4xl">Tu asistente, en cuatro pasos</h1>
+    <p class="mt-3 text-lg text-slate-400">No tienes que configurar nada: comprobamos tu ordenador, elegimos lo mejor para él y lo instalamos por ti.</p>
+    <div class="mt-8">
+      <StartWizard client:only="svelte" {models} {gpus} />
+    </div>
+  </div>
+</Layout>

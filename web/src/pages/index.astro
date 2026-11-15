@@ -1,79 +1,106 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import HeroDemo from '../components/landing/HeroDemo.svelte';
+import OfficeChatDemo from '../components/landing/OfficeChatDemo.svelte';
+import CompatCheck from '../components/landing/CompatCheck.svelte';
 import SpeedRace from '../components/landing/SpeedRace.svelte';
-import HeroYourMachine from '../components/landing/HeroYourMachine.svelte';
-import UseCases from '../components/landing/UseCases.astro';
-import FeaturedModels from '../components/landing/FeaturedModels.astro';
-import CloudComparison from '../components/landing/CloudComparison.astro';
-import Validation from '../components/landing/Validation.astro';
 import { getGpus, getModels } from '../lib/catalog.ts';
 import { url } from '../lib/url.ts';
 
 const models = await getModels();
 const gpus = await getGpus();
-const families = [...new Set(models.map((m) => m.family))];
-const marquee = ['llama.cpp', 'Open WebUI', 'Hugging Face', 'GGUF', ...families, 'CUDA', 'ROCm', 'Vulkan', 'Rust'];
 
-const stats = [
-  { value: String(models.length), label: 'modelos abiertos en el catálogo' },
-  { value: String(gpus.length), label: 'GPUs NVIDIA, AMD, Intel y Apple' },
-  { value: '0', label: 'datos que salen de tu equipo' },
-  { value: '0 €', label: 'sin suscripciones ni límites de uso' },
+const promises = [
+  { icon: '€', title: 'Gratis', text: 'Sin suscripciones ni cuotas por empleado.' },
+  { icon: '🔒', title: 'Privado', text: 'Lo que escribes no sale de tu ordenador.' },
+  { icon: '✈', title: 'Sin internet', text: 'Una vez instalado, funciona desconectado.' },
+  { icon: '⏱', title: 'En unos minutos', text: 'Lo instalamos por ti, sin configurar nada.' },
+];
+
+const uses = [
+  { title: 'Escribir correos', ask: 'Responde a este cliente que pide un descuento, con amabilidad pero sin ceder.' },
+  { title: 'Resumir documentos', ask: 'Resume este informe de 20 páginas en una lista de puntos clave.' },
+  { title: 'Atender a clientes', ask: 'Prepara respuestas para las 10 preguntas más habituales sobre nuestros envíos.' },
+  { title: 'Traducir', ask: 'Traduce esta oferta al inglés y al francés manteniendo un tono profesional.' },
+  { title: 'Presupuestos y ofertas', ask: 'Redacta una propuesta comercial para una reforma de cocina a partir de estas notas.' },
+  { title: 'Ideas y textos', ask: 'Dame 5 ideas de publicaciones para las redes sociales de mi tienda en noviembre.' },
 ];
 
 const steps = [
   {
-    n: '01',
-    title: 'Analiza tu equipo',
-    text: 'La web detecta tu GPU, CPU y memoria desde el navegador. Con el agente local obtienes la VRAM exacta, el tipo de RAM y la versión de CUDA.',
-    icon: 'M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2zM9 9h6v6H9z',
+    n: '1',
+    title: 'Descarga la app',
+    text: 'Un programa pequeño para Windows. Lo abres y se conecta solo con esta web.',
   },
   {
-    n: '02',
-    title: 'Simula antes de descargar',
-    text: 'Elige modelo, cuantización y contexto. Verás cuánta memoria ocupa, dónde se ejecuta y una respuesta escribiéndose a la velocidad real estimada.',
-    icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+    n: '2',
+    title: 'Elige tu asistente',
+    text: 'Rápido, equilibrado o más inteligente. Comprobamos tu ordenador y te recomendamos el que mejor le va.',
   },
   {
-    n: '03',
-    title: 'Instala y chatea',
-    text: 'Te indicamos el build de llama.cpp para tu GPU, el modelo de Hugging Face y cómo arrancar Open WebUI, y con el agente lo instala y arranca todo con un clic. Sin él, te damos los comandos listos para copiar.',
-    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+    n: '3',
+    title: 'Empieza a usarlo',
+    text: 'Lo descargamos e instalamos por ti. Se abre en tu navegador, igual que ChatGPT, pero dentro de tu ordenador.',
+  },
+];
+
+const reasons = [
+  {
+    title: 'Los datos de tu empresa, en tu empresa',
+    text: 'Contratos, datos de clientes o nóminas no viajan a servidores de otros. Mucho más fácil de encajar con el RGPD y con tus políticas de confidencialidad.',
+  },
+  {
+    title: 'Sin cuotas por usuario',
+    text: 'Las IA en la nube se pagan por persona y mes. Esta es gratis, la uses tú solo o todo tu equipo.',
+  },
+  {
+    title: 'Funciona sin conexión',
+    text: 'En la oficina, en un viaje o con una conexión inestable: una vez instalado, no necesita internet.',
+  },
+  {
+    title: 'Sin límites de mensajes',
+    text: 'Pregunta todo lo que quieras. Nadie te corta a mitad de día ni te cobra por usarlo más.',
   },
 ];
 
 const faqs = [
   {
-    q: '¿De verdad puedo ejecutar una IA en mi ordenador?',
-    a: 'Sí. Modelos abiertos como Qwen3, Llama, Gemma, Mistral o gpt-oss funcionan en ordenadores normales gracias a llama.cpp y a la cuantización, que reduce su tamaño a una cuarta parte con poca pérdida de calidad. Un portátil moderno puede mover modelos de 3–8B; una GPU de 12–24 GB, modelos de 14–32B.',
+    q: '¿Es lo mismo que ChatGPT?',
+    a: 'Funciona de forma parecida: escribes una pregunta y te responde. La diferencia es que este asistente vive en tu ordenador, así que es privado, gratis y funciona sin internet. A cambio, para tareas muy complejas, ChatGPT y otras IA en la nube siguen siendo más potentes. No tenemos relación con OpenAI.',
   },
   {
-    q: '¿Necesito una tarjeta gráfica?',
-    a: 'No es imprescindible. Sin GPU, los modelos pequeños y los MoE (como Qwen3 30B-A3B o gpt-oss 20B) van a una velocidad usable. Con GPU todo es mucho más rápido, sobre todo si el modelo cabe entero en la VRAM.',
+    q: '¿Necesito saber de informática?',
+    a: 'No. Descargas la app, la abres y pulsas un botón. Nosotros comprobamos tu ordenador, elegimos lo que mejor le va y lo instalamos. No hay que configurar nada.',
   },
   {
-    q: '¿Cómo calcula la velocidad?',
-    a: 'Al generar texto, el modelo lee todos sus pesos activos de memoria por cada token, así que la velocidad depende sobre todo del ancho de banda de la VRAM o la RAM. Combinamos eso con el tamaño de cada cuantización, la caché KV y el reparto entre GPU y RAM. Es una estimación orientativa (±30 %).',
+    q: '¿Qué ordenador necesito?',
+    a: 'Un ordenador con Windows 10 u 11 y, como mínimo, 8 GB de memoria RAM (mejor 16 GB). Con una tarjeta gráfica, sobre todo NVIDIA, las respuestas son mucho más rápidas. Antes de instalar te decimos si tu equipo está preparado.',
   },
   {
-    q: '¿Qué es el agente local y es seguro?',
-    a: 'Es un pequeño programa en Rust que lee el hardware exacto de tu equipo (algo que un navegador no puede hacer) y, si se lo pides, instala y arranca el chat. Solo escucha en tu propio ordenador (127.0.0.1) y solo acepta órdenes de esta web después de vincularla con un código secreto. Únicamente instala, dentro de tu carpeta de usuario, llama.cpp, Open WebUI y los modelos del catálogo; nunca ejecuta comandos arbitrarios. Es opcional: la web funciona sin él.',
+    q: '¿Funciona en Mac?',
+    a: 'Todavía no. Empezamos por Windows y la versión para Mac llegará más adelante.',
   },
   {
-    q: '¿Mis conversaciones salen de mi ordenador?',
-    a: 'No. llama.cpp y Open WebUI se ejecutan en tu equipo. Una vez descargado el modelo, puedes desconectar internet y seguir chateando.',
+    q: '¿Cuánto ocupa?',
+    a: 'Entre 10 y 25 GB en total: hasta 7 GB de la pantalla de chat y entre 3 y 18 GB del asistente que elijas. La primera instalación tarda un rato porque se descarga todo de una vez (depende de tu conexión); después ya no necesita descargar nada.',
   },
   {
-    q: '¿Cuánto cuesta?',
-    a: 'Nada. AIL Helper, llama.cpp, Open WebUI y los modelos del catálogo son gratuitos y de código o pesos abiertos (revisa la licencia de cada modelo para usos comerciales).',
+    q: '¿Es seguro? ¿Mis datos salen de mi ordenador?',
+    a: 'Tus conversaciones nunca salen de tu ordenador. La app solo descarga programas y asistentes de fuentes oficiales y comprueba que no se hayan modificado. Su código es público, y cualquiera puede revisar lo que hace.',
+  },
+  {
+    q: '¿Lo pueden usar varias personas de mi empresa?',
+    a: 'Sí: cada persona lo instala en su propio ordenador, sin coste y sin límite de instalaciones.',
+  },
+  {
+    q: '¿Y si algo no funciona?',
+    a: 'Si la instalación falla, la app te lo dirá y te mostrará los detalles para poder ayudarte. Puedes volver a intentarlo en cualquier momento sin perder lo que ya se haya descargado.',
   },
 ];
 ---
 
 <Layout
-  title="AIL Helper · Tu propia IA, en tu ordenador"
-  description="Descubre qué modelos de IA puedes ejecutar en local, a qué velocidad irán en tu equipo, e instálalos con llama.cpp y Open WebUI."
+  title="AIL Helper · Tu asistente de IA privado y gratis"
+  description="Un asistente de inteligencia artificial como ChatGPT, pero en tu ordenador: privado, gratis y sin internet. Lo instalamos por ti en unos minutos."
   fullWidth
 >
   <!-- ============ HERO ============ -->
@@ -82,111 +109,134 @@ const faqs = [
     <div class="pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-sky-500/20 blur-[120px]"></div>
     <div class="pointer-events-none absolute top-40 -right-40 h-[360px] w-[360px] rounded-full bg-lime-400/10 blur-[100px]"></div>
 
-    <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pt-20 pb-24 lg:grid-cols-[1.1fr_1fr] lg:pt-28">
+    <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pt-16 pb-20 lg:grid-cols-[1.05fr_1fr] lg:pt-24">
       <div>
-        <a
-          href={url('/analizar')}
-          class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300 hover:border-white/25"
-        >
+        <p class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
           <span class="h-1.5 w-1.5 rounded-full bg-lime-400"></span>
-          Gratis · Código abierto · 100 % local
-        </a>
-        <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-slate-50 sm:text-6xl lg:text-[4.2rem] lg:leading-[1.05]">
-          Tu propia IA,<br /><span class="text-gradient">en tu ordenador.</span>
-        </h1>
-        <p class="mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
-          Descubre qué modelos abiertos puede mover tu equipo, siente a qué velocidad responderán antes de descargar nada y
-          ponlos en marcha con <strong class="font-medium text-slate-200">llama.cpp</strong> y{' '}
-          <strong class="font-medium text-slate-200">Open WebUI</strong>. Sin suscripciones y sin que tus datos salgan de casa.
+          Para pymes, autónomos y cualquier persona
         </p>
-        <div class="mt-9 flex flex-wrap gap-3">
-          <a href={url('/analizar')} class="btn btn-lg shadow-lg shadow-sky-500/25">
-            Analizar mi equipo
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg>
+        <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-slate-50 sm:text-6xl lg:text-[3.9rem] lg:leading-[1.05]">
+          Tu propio asistente de IA, <span class="text-gradient">privado y gratis.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-slate-300">
+          Funciona como ChatGPT, pero dentro de tu ordenador: los datos de tu empresa no salen de él, no pagas cuotas y funciona sin
+          internet. <strong class="font-semibold text-slate-100">Lo instalamos por ti en unos minutos.</strong>
+        </p>
+        <div class="mt-9 flex flex-wrap items-center gap-4">
+          <a href={url('/empezar')} class="btn btn-lg shadow-lg shadow-sky-500/25">
+            Empezar gratis
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"
+              ><path d="M5 12h14m-6-6 6 6-6 6"></path></svg
+            >
           </a>
-          <a href="#carrera" class="btn-outline">Ver la demo</a>
+          <a href="#como" class="text-slate-300 underline-offset-4 hover:text-white hover:underline">¿Cómo funciona?</a>
         </div>
-        <HeroYourMachine client:load {models} {gpus} />
-        <p class="mt-4 text-xs text-slate-400">Funciona en Windows y Linux · No requiere registro</p>
+        <CompatCheck client:load {models} {gpus} />
+        <p class="mt-2 text-sm text-slate-400">Para Windows 10 y 11 · Sin registro · Mac, próximamente</p>
       </div>
 
       <div>
-        <HeroDemo client:load {models} {gpus} />
+        <OfficeChatDemo client:load />
       </div>
     </div>
   </section>
 
-  <!-- ============ MARQUEE ============ -->
-  <section class="border-y border-white/5 bg-white/[0.015] py-6" aria-label="Tecnologías y modelos compatibles">
-    <div class="marquee overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_10%,#000_90%,transparent)]">
-      <div class="marquee-track flex w-max gap-12 pr-12">
-        {
-          [...marquee, ...marquee].map((name, i) => (
-            <span class="text-lg font-semibold whitespace-nowrap text-slate-500" aria-hidden={i >= marquee.length ? 'true' : undefined}>
-              {name}
+  <!-- ============ PROMESAS ============ -->
+  <section class="border-y border-white/5 bg-white/[0.02]">
+    <ul class="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10 lg:grid-cols-4">
+      {
+        promises.map((p) => (
+          <li class="flex gap-3">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sky-400/10 text-lg text-sky-200" aria-hidden="true">
+              {p.icon}
             </span>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ STATS ============ -->
-  <section class="mx-auto max-w-6xl px-4 pt-20">
-    <dl class="reveal grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 lg:grid-cols-4">
-      {
-        stats.map((s) => (
-          <div class="bg-slate-950 p-6 sm:p-8">
-            <dt class="text-sm text-slate-400">{s.label}</dt>
-            <dd class="mt-2 text-3xl font-bold tracking-tight text-slate-50 sm:text-4xl">{s.value}</dd>
-          </div>
-        ))
-      }
-    </dl>
-  </section>
-
-  <UseCases />
-
-  <!-- ============ CÓMO FUNCIONA ============ -->
-  <section id="como" class="section scroll-mt-16">
-    <div class="reveal mx-auto max-w-2xl text-center">
-      <p class="eyebrow">Cómo funciona</p>
-      <h2 class="h2">De «¿me irá?» a chatear, en tres pasos</h2>
-      <p class="lead">Sin tener que entender de cuantizaciones, capas en GPU ni drivers. Nosotros hacemos las cuentas.</p>
-    </div>
-    <ol class="relative mt-16 grid gap-6 md:grid-cols-3">
-      <div
-        aria-hidden="true"
-        class="pointer-events-none absolute top-10 right-[16%] left-[16%] hidden h-px bg-gradient-to-r from-transparent via-sky-400/40 to-transparent md:block"
-      >
-      </div>
-      {
-        steps.map((s) => (
-          <li class="reveal glass relative p-7">
-            <div class="flex items-center justify-between">
-              <span class="grid h-12 w-12 place-items-center rounded-xl border border-sky-400/30 bg-sky-400/10 text-sky-300">
-                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d={s.icon} />
-                </svg>
-              </span>
-              <span class="font-mono text-sm text-slate-600">{s.n}</span>
+            <div>
+              <p class="font-semibold text-slate-100">{p.title}</p>
+              <p class="text-sm text-slate-400">{p.text}</p>
             </div>
-            <h3 class="mt-6 text-xl font-semibold text-slate-100">{s.title}</h3>
-            <p class="mt-3 leading-relaxed text-slate-400">{s.text}</p>
           </li>
         ))
       }
-    </ol>
+    </ul>
   </section>
 
-  <!-- ============ CARRERA ============ -->
-  <section id="carrera" class="relative scroll-mt-16 border-y border-white/5 bg-gradient-to-b from-sky-950/20 to-transparent">
+  <!-- ============ USOS ============ -->
+  <section id="usos" class="section scroll-mt-16">
+    <div class="reveal mx-auto max-w-2xl text-center">
+      <p class="eyebrow">¿Para qué te sirve?</p>
+      <h2 class="h2">Las tareas de cada día, en la mitad de tiempo</h2>
+      <p class="lead">Pídeselo como se lo pedirías a un compañero. Estos son algunos ejemplos reales:</p>
+    </div>
+    <ul class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        uses.map((u) => (
+          <li class="reveal glass p-6">
+            <h3 class="text-lg font-semibold text-slate-100">{u.title}</h3>
+            <p class="mt-3 rounded-2xl rounded-br-sm bg-sky-500/10 px-4 py-3 text-sm text-sky-50">«{u.ask}»</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ============ CÓMO FUNCIONA ============ -->
+  <section id="como" class="scroll-mt-16 border-y border-white/5 bg-gradient-to-b from-sky-950/20 to-transparent">
     <div class="section">
       <div class="reveal mx-auto max-w-2xl text-center">
-        <p class="eyebrow">Demo en vivo</p>
-        <h2 class="h2">La misma pregunta, tres equipos</h2>
+        <p class="eyebrow">Así de fácil</p>
+        <h2 class="h2">Tres pasos y listo</h2>
+        <p class="lead">Sin configurar nada y sin conocimientos técnicos.</p>
+      </div>
+      <ol class="mt-14 grid gap-6 md:grid-cols-3">
+        {
+          steps.map((s) => (
+            <li class="reveal glass p-7">
+              <span class="grid h-12 w-12 place-items-center rounded-full bg-sky-500 text-xl font-bold text-slate-950">{s.n}</span>
+              <h3 class="mt-5 text-xl font-semibold text-slate-100">{s.title}</h3>
+              <p class="mt-2 leading-relaxed text-slate-400">{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="reveal mt-12 text-center">
+        <a href={url('/empezar')} class="btn btn-lg">Empezar gratis</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ POR QUÉ LOCAL ============ -->
+  <section id="privacidad" class="section scroll-mt-16">
+    <div class="reveal mx-auto max-w-2xl text-center">
+      <p class="eyebrow">¿Por qué en tu ordenador?</p>
+      <h2 class="h2">Tu información, bajo tu control</h2>
+    </div>
+    <div class="mt-14 grid gap-4 sm:grid-cols-2">
+      {
+        reasons.map((r) => (
+          <article class="reveal glass p-7">
+            <h3 class="text-lg font-semibold text-slate-100">
+              <span class="mr-2 text-lime-400">✓</span>
+              {r.title}
+            </h3>
+            <p class="mt-2 leading-relaxed text-slate-400">{r.text}</p>
+          </article>
+        ))
+      }
+    </div>
+    <p class="reveal mx-auto mt-8 max-w-3xl rounded-xl border border-white/10 bg-white/[0.03] p-5 text-center text-slate-400">
+      <strong class="text-slate-200">Para ser claros:</strong> para tareas muy complejas, las IA en la nube como ChatGPT siguen siendo más
+      potentes. Para el trabajo de cada día (escribir, resumir, traducir, ordenar ideas), un asistente en tu ordenador cumple de sobra.
+    </p>
+  </section>
+
+  <!-- ============ VELOCIDAD ============ -->
+  <section id="carrera" class="scroll-mt-16 border-y border-white/5 bg-white/[0.015]">
+    <div class="section">
+      <div class="reveal mx-auto max-w-2xl text-center">
+        <p class="eyebrow">¿Me irá bien?</p>
+        <h2 class="h2">Depende de tu ordenador</h2>
         <p class="lead">
-          La velocidad depende de dónde quepa el modelo. Mira cómo responde cada equipo y por qué la memoria importa más que la potencia.
+          Mira cuánto tarda la misma respuesta en tres ordenadores distintos. Antes de instalar, comprobamos el tuyo y te decimos qué esperar.
         </p>
       </div>
       <div class="reveal mt-12">
@@ -195,159 +245,18 @@ const faqs = [
     </div>
   </section>
 
-  <FeaturedModels {models} {gpus} />
-
-  <!-- ============ BENTO ============ -->
-  <section class="section">
-    <div class="reveal max-w-2xl">
-      <p class="eyebrow">Todo incluido</p>
-      <h2 class="h2">Pensado para que funcione a la primera</h2>
-    </div>
-    <div class="mt-12 grid gap-4 md:grid-cols-6">
-      <article class="reveal glass p-7 md:col-span-4">
-        <h3 class="text-lg font-semibold text-slate-100">Recomendación hecha a tu medida</h3>
-        <p class="mt-2 max-w-lg text-slate-400">
-          Para cada modelo elegimos la cuantización con más calidad que cabe entera en tu GPU. Si no cabe, calculamos cuántas capas van en
-          VRAM y cuántas en RAM, y te avisamos de lo que eso supone.
-        </p>
-        <div class="mt-6 space-y-2 font-mono text-xs">
-          {
-            [
-              ['Q8_0', '8,7 GB', 'Prácticamente original', 'w-[92%]', 'bg-amber-400'],
-              ['Q5_K_M', '5,8 GB', 'Muy buena', 'w-[63%]', 'bg-sky-400'],
-              ['Q4_K_M', '5,0 GB', 'Recomendada', 'w-[54%]', 'bg-lime-400'],
-            ].map(([q, size, label, w, color]) => (
-              <div class="flex items-center gap-3">
-                <span class="w-16 text-slate-300">{q}</span>
-                <div class="h-2 flex-1 rounded-full bg-white/5">
-                  <div class:list={['h-2 rounded-full', w, color]} />
-                </div>
-                <span class="w-14 text-right text-slate-400">{size}</span>
-                <span class="hidden w-40 text-slate-500 sm:block">{label}</span>
-              </div>
-            ))
-          }
-        </div>
-      </article>
-
-      <article class="reveal glass p-7 md:col-span-2">
-        <div class="grid h-12 w-12 place-items-center rounded-xl border border-lime-400/30 bg-lime-400/10 text-lime-300">
-          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3l7 4v5c0 4.5-3 8.3-7 9-4-0.7-7-4.5-7-9V7l7-4z"></path><path d="M9 12l2 2 4-4"></path>
-          </svg>
-        </div>
-        <h3 class="mt-5 text-lg font-semibold text-slate-100">Privado por diseño</h3>
-        <p class="mt-2 text-slate-400">Tus conversaciones nunca salen de tu ordenador. Funciona sin conexión una vez descargado el modelo.</p>
-      </article>
-
-      <article class="reveal glass p-7 md:col-span-2">
-        <div class="grid h-12 w-12 place-items-center rounded-xl border border-orange-400/30 bg-orange-400/10 text-orange-300">
-          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 7h16M4 12h16M4 17h10"></path>
-          </svg>
-        </div>
-        <h3 class="mt-5 text-lg font-semibold text-slate-100">Agente en Rust</h3>
-        <p class="mt-2 text-slate-400">
-          Un binario pequeño y opcional que lee la VRAM exacta, el tipo de RAM y la versión de CUDA. Solo escucha en tu equipo.
-        </p>
-      </article>
-
-      <article class="reveal glass p-7 md:col-span-4">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <h3 class="text-lg font-semibold text-slate-100">Instalación sin misterios</h3>
-          <span class="rounded-full border border-lime-300/30 bg-lime-300/10 px-2.5 py-0.5 text-xs text-lime-200">
-            Con el agente: un clic · Sin él: comandos
-          </span>
-        </div>
-        <p class="mt-2 text-slate-400">
-          El build correcto de llama.cpp para tu GPU (CUDA, HIP, Vulkan o CPU), el modelo descargado directamente de Hugging Face y Open WebUI
-          instalado con uv, sin necesidad de tener Python. Generamos los comandos exactos para tu equipo y el modelo que elijas.
-        </p>
-        <pre class="code mt-5"><span class="text-slate-500">$</span> llama-server -hf Qwen/Qwen3-8B-GGUF:Q4_K_M -c 8192 -ngl 999
-<span class="text-slate-500">$</span> uvx --python 3.11 open-webui@latest serve --port 3000
-<span class="text-lime-300">✓ Chat listo en http://localhost:3000</span></pre>
-      </article>
-
-      <article class="reveal glass p-7 md:col-span-3">
-        <h3 class="text-lg font-semibold text-slate-100">Entiende los Mixture-of-Experts</h3>
-        <p class="mt-2 text-slate-400">
-          Modelos como Qwen3 30B-A3B o gpt-oss solo activan una fracción de sus parámetros por token. Por eso pueden ir rápido incluso sin
-          GPU, y el simulador lo tiene en cuenta.
-        </p>
-      </article>
-
-      <article class="reveal glass p-7 md:col-span-3">
-        <h3 class="text-lg font-semibold text-slate-100">Del portátil a la workstation</h3>
-        <p class="mt-2 text-slate-400">
-          NVIDIA, AMD, Intel Arc y Apple Silicon; desde 8 GB de RAM hasta máquinas con 256 GB. Ajusta cualquier valor a mano si la detección
-          se queda corta.
-        </p>
-      </article>
-    </div>
-  </section>
-
-  <CloudComparison />
-
-  <!-- ============ ARQUITECTURA ============ -->
-  <section class="border-y border-white/5 bg-white/[0.015]">
-    <div class="section">
-      <div class="reveal mx-auto max-w-2xl text-center">
-        <p class="eyebrow">Bajo el capó</p>
-        <h2 class="h2">Una web, un agente y tu IA</h2>
-        <p class="lead">La web hace las cuentas. El agente, opcional, aporta datos exactos. Todo lo pesado ocurre en tu máquina.</p>
-      </div>
-      <div class="reveal mt-14 grid items-stretch gap-4 lg:grid-cols-[1fr_auto_1fr_auto_1fr]">
-        {
-          [
-            ['Web', 'Esta página · Astro', ['Catálogo de modelos', 'Motor de estimación', 'Simulador de chat']],
-            null,
-            ['Agente local', 'Rust · 127.0.0.1:47800', ['Detección exacta de hardware', 'CORS y Host restringidos', 'Instalación con un clic']],
-            null,
-            ['Tu IA', 'llama.cpp + Open WebUI', ['API compatible con OpenAI', 'Chat en localhost:3000', 'Sin conexión a internet']],
-          ].map((col) =>
-            col === null ? (
-              <div class="hidden items-center justify-center text-slate-600 lg:flex">
-                <svg class="h-6 w-10" viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M2 12h34m-6-6 6 6-6 6" />
-                </svg>
-              </div>
-            ) : (
-              <div class="glass p-6">
-                <h3 class="font-semibold text-slate-100">{col[0]}</h3>
-                <p class="font-mono text-xs text-sky-300">{col[1]}</p>
-                <ul class="mt-4 space-y-2 text-sm text-slate-400">
-                  {(col[2] as string[]).map((item) => (
-                    <li class="flex gap-2">
-                      <span class="text-lime-400">✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ),
-          )
-        }
-      </div>
-    </div>
-  </section>
-
-  <Validation {gpus} />
-
   <!-- ============ FAQ ============ -->
   <section id="faq" class="section scroll-mt-16">
     <div class="grid gap-12 lg:grid-cols-[1fr_2fr]">
       <div class="reveal">
         <p class="eyebrow">Preguntas frecuentes</p>
         <h2 class="h2">Lo que todo el mundo pregunta</h2>
-        <p class="lead">
-          ¿Quieres los detalles técnicos? Lee la <a class="text-sky-300 hover:underline" href={url('/como-funciona')}>metodología</a>.
-        </p>
       </div>
       <div class="divide-y divide-white/10 border-y border-white/10">
         {
           faqs.map((f) => (
             <details class="reveal group py-5" name="faq">
-              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 text-left font-medium text-slate-100 [&::-webkit-details-marker]:hidden">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 text-left text-lg font-medium text-slate-100 [&::-webkit-details-marker]:hidden">
                 {f.q}
                 <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/10 text-slate-400 transition-transform group-open:rotate-45">
                   +
@@ -363,33 +272,13 @@ const faqs = [
 
   <!-- ============ CTA ============ -->
   <section class="mx-auto max-w-6xl px-4 pb-24">
-    <div class="reveal relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-sky-500/20 via-slate-900 to-lime-400/10 px-6 py-16 text-center sm:px-16">
+    <div
+      class="reveal relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-sky-500/20 via-slate-900 to-lime-400/10 px-6 py-16 text-center sm:px-16"
+    >
       <div class="bg-grid pointer-events-none absolute inset-0 opacity-60"></div>
-      <h2 class="relative text-3xl font-bold tracking-tight text-slate-50 sm:text-5xl">¿Qué IA puede mover tu equipo?</h2>
-      <p class="relative mx-auto mt-4 max-w-xl text-lg text-slate-300">Descúbrelo en unos segundos. Sin instalar nada.</p>
-      <a href={url('/analizar')} class="btn btn-lg relative mt-8 shadow-lg shadow-sky-500/30">
-        Analizar mi equipo
-        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg>
-      </a>
+      <h2 class="relative text-3xl font-bold tracking-tight text-slate-50 sm:text-5xl">Tu asistente privado, en unos minutos</h2>
+      <p class="relative mx-auto mt-4 max-w-xl text-lg text-slate-300">Gratis, sin registro y sin configurar nada.</p>
+      <a href={url('/empezar')} class="btn btn-lg relative mt-8 shadow-lg shadow-sky-500/30">Empezar gratis</a>
     </div>
   </section>
 </Layout>
-
-<style>
-  .marquee-track {
-    animation: marquee 40s linear infinite;
-  }
-  .marquee:hover .marquee-track {
-    animation-play-state: paused;
-  }
-  @keyframes marquee {
-    to {
-      transform: translateX(-50%);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .marquee-track {
-      animation: none;
-    }
-  }
-</style>

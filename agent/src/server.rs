@@ -140,7 +140,12 @@ async fn status(State(state): State<Arc<AppState>>) -> Response {
     let mut svc = state.agent.services.lock().await;
     let llama = Services::running(&mut svc.llama);
     let webui = Services::running(&mut svc.webui);
-    Json(serde_json::json!({ "job": job, "services": { "llama": llama, "webui": webui } })).into_response()
+    let paths = &state.agent.paths;
+    let installed = serde_json::json!({
+        "llama": crate::install::llamacpp::installed(paths).is_some(),
+        "webui": crate::install::uv::webui_path(paths).exists(),
+    });
+    Json(serde_json::json!({ "job": job, "services": { "llama": llama, "webui": webui }, "installed": installed })).into_response()
 }
 
 async fn stop(State(state): State<Arc<AppState>>) -> Response {
